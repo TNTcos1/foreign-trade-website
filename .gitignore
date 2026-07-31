@@ -1,0 +1,12 @@
+node_modules/
+.next/
+coverage/
+playwright-report/
+test-results/
+.env
+.env.local
+.env.*.local
+.superpowers/sdd/
+.superpowers/brainstorm/.last-port
+.superpowers/brainstorm/.last-token
+.superpowers/brainstorm/*/state/

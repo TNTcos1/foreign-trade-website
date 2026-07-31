@@ -1,0 +1,81 @@
+<style>
+.wrap{max-width:1140px;margin:0 auto}.panel{border:1px solid var(--border-color,#d8d8d8);border-radius:16px;padding:19px;background:var(--card-bg,#fff);margin-top:18px}.panel h3{margin:0 0 5px}.caption{font-size:11px;color:#6b645b;margin-bottom:13px}.diagram{display:grid;grid-template-columns:1fr auto 1.15fr auto 1fr;gap:10px;align-items:stretch;margin-top:15px}.column{display:grid;gap:8px}.box{border:1px solid #ded4c6;border-radius:10px;padding:11px;background:#faf6ef;font-size:10px;line-height:1.45}.box strong{display:block;font-size:11px;color:#2c3a38;margin-bottom:3px}.core{background:#2c3a38;color:#fff;border-color:#2c3a38}.core strong{color:#fff}.admin{background:#fff0e2;border-color:#e1b996}.external{background:#e9f2ed;border-color:#bad2c4}.arrow{align-self:center;color:#a45b3d;font-size:22px}.flowline{display:flex;gap:7px;align-items:stretch;margin-top:14px}.flowstep{flex:1;border-radius:9px;padding:10px;background:#f6f0e7;font-size:9px;line-height:1.4}.flowstep strong{display:block;font-size:10px;margin-bottom:3px}.smallarrow{align-self:center;color:#a45b3d}.errors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}.error{border-radius:9px;padding:11px;background:#f8f2e9;font-size:10px;line-height:1.5}.error strong{display:block;font-size:11px;color:#2c3a38;margin-bottom:3px}.quality{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}.q{border-top:4px solid #a45b3d;border-radius:9px;padding:11px;background:#f7f3ec;font-size:10px;line-height:1.45}.q strong{display:block;font-size:11px;margin-bottom:4px}.security{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.sec{border:1px solid #dfd5c7;border-radius:9px;padding:11px;background:#fff;font-size:10px;line-height:1.5}.sec strong{display:block;font-size:11px;color:#2c3a38;margin-bottom:3px}.scope{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:15px}.in,.out{border-radius:12px;padding:15px}.in{background:#e9f2ed;border:1px solid #bad2c4}.out{background:#f0ece6;border:1px solid #d7cdc0}.scope h4{margin:0 0 9px}.scope ul{font-size:10px;line-height:1.7;margin:0;padding-left:17px}.note{padding:12px 14px;border-left:4px solid #a45b3d;background:#fbf2e8;font-size:11px;line-height:1.55;margin-top:14px}@media(max-width:900px){.diagram{grid-template-columns:1fr}.arrow{transform:rotate(90deg);text-align:center}.flowline{flex-direction:column}.smallarrow{transform:rotate(90deg);text-align:center}.errors,.quality{grid-template-columns:1fr 1fr}.security,.scope{grid-template-columns:1fr}}
+</style>
+<div class="wrap">
+<h2>设计第 4 部分：架构、异常处理与质量保障</h2>
+<p class="subtitle">首版采用单体 Web 应用与模块化边界：部署简单、成本可控，同时让目录、内容、询价和线索彼此独立。</p>
+
+<div class="panel">
+  <h3>系统架构</h3>
+  <div class="caption">具体技术框架在实施计划中根据现有团队与部署条件选择；设计先固定职责和数据边界。</div>
+  <div class="diagram">
+    <div class="column">
+      <div class="box"><strong>海外客户前台</strong>英语 LTR / 阿语 RTL；手机优先；商品目录、详情、询价清单和信任内容。</div>
+      <div class="box external"><strong>搜索与分享入口</strong>Google、WhatsApp / 社媒链接、展会二维码和市场落地页。</div>
+    </div>
+    <div class="arrow">⇄</div>
+    <div class="column">
+      <div class="box core"><strong>Web 应用</strong>页面渲染、语言路由、SEO、身份验证、表单接口与业务规则。</div>
+      <div class="box"><strong>商品目录模块</strong>两种商品模板、状态、筛选、价格策略与最后核实日期。</div>
+      <div class="box"><strong>内容与语言模块</strong>公司内容、案例、市场页、英语原文、阿语译文与术语词库。</div>
+      <div class="box"><strong>询价与线索模块</strong>询价清单、表单、商品快照、分配、销售管道与 CSV 导出。</div>
+    </div>
+    <div class="arrow">⇄</div>
+    <div class="column">
+      <div class="box"><strong>关系数据库</strong>商品、翻译、媒体元数据、用户、询价、线索状态和操作记录。</div>
+      <div class="box"><strong>对象存储 + CDN</strong>商品图片与视频；生成多尺寸图片，面向海外加速。</div>
+      <div class="box external"><strong>外部服务</strong>阿语翻译、邮件通知、访问统计和 WhatsApp 深链接。</div>
+      <div class="box admin"><strong>管理后台</strong>管理员、编辑、业务员按权限操作；后台不对搜索引擎开放。</div>
+    </div>
+  </div>
+  <div class="note"><strong>架构原则：</strong>不为首版拆分微服务。模块通过明确的数据接口协作，未来若询价量或媒体量显著增长，再单独扩展对应模块。</div>
+</div>
+
+<div class="panel">
+  <h3>关键数据流</h3>
+  <div class="flowline"><div class="flowstep"><strong>发布商品</strong>英文与规格录入</div><div class="smallarrow">→</div><div class="flowstep"><strong>媒体处理</strong>压缩、缩略图与 CDN</div><div class="smallarrow">→</div><div class="flowstep"><strong>阿语生成</strong>固定数字并使用词库</div><div class="smallarrow">→</div><div class="flowstep"><strong>人工预览</strong>英文手机 + 阿语 RTL</div><div class="smallarrow">→</div><div class="flowstep"><strong>发布与收录</strong>生成双语 URL、站点地图和分享信息</div></div>
+  <div class="flowline"><div class="flowstep"><strong>客户选货</strong>本地询价清单</div><div class="smallarrow">→</div><div class="flowstep"><strong>服务端提交</strong>校验、限流、防机器人</div><div class="smallarrow">→</div><div class="flowstep"><strong>事务写入</strong>询价 + 商品快照 + 来源</div><div class="smallarrow">→</div><div class="flowstep"><strong>通知分配</strong>邮件与后台未读</div><div class="smallarrow">→</div><div class="flowstep"><strong>销售跟进</strong>状态、备注、报价与结果</div></div>
+</div>
+
+<div class="panel">
+  <h3>客户可理解的异常处理</h3>
+  <div class="errors">
+    <div class="error"><strong>商品售罄 / 状态变化</strong>清单中明确标记不可询价，保留客户填写内容，并推荐同类货源。</div>
+    <div class="error"><strong>询价提交失败</strong>保留清单和已填表单，显示可操作错误；允许重试或复制询价编号后 WhatsApp 联系。</div>
+    <div class="error"><strong>翻译服务失败</strong>保存英文草稿并提示稍后重试；不发布缺失阿语的阿语页面，也不伪造翻译。</div>
+    <div class="error"><strong>图片 / 视频加载慢</strong>先显示压缩图和加载状态；视频按点击加载，不阻塞商品主要信息。</div>
+    <div class="error"><strong>邮件通知失败</strong>询价仍成功写入后台；系统重试通知并向管理员显示失败状态。</div>
+    <div class="error"><strong>重复提交</strong>短时间内同一请求返回原询价编号，避免业务员收到重复线索。</div>
+    <div class="error"><strong>阿语布局溢出</strong>发布预览提示；前台按钮允许换行，不因 RTL 或长文本遮挡价格和操作。</div>
+    <div class="error"><strong>页面不存在</strong>双语 404 页面提供搜索、最新货源和询价入口，不自动跳到无关商品。</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>安全、隐私与可靠性</h3>
+  <div class="security">
+    <div class="sec"><strong>后台安全</strong>安全密码散列、登录限流、基于角色的权限控制、安全 Cookie、CSRF 防护；管理员和编辑建议启用双因素认证。</div>
+    <div class="sec"><strong>输入与媒体安全</strong>所有表单在服务端校验；富文本清理防 XSS；上传限制格式和大小，随机文件名，媒体与应用隔离存储。</div>
+    <div class="sec"><strong>询价隐私</strong>仅收集业务所需信息；隐私同意、保留期限、访问日志和管理员导出权限明确，不把客户联系方式暴露在前台。</div>
+    <div class="sec"><strong>备份与监控</strong>数据库定期自动备份并演练恢复；监控前台可用性、接口错误、询价失败、邮件失败和存储容量。</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>测试与验收</h3>
+  <div class="quality">
+    <div class="q"><strong>单元测试</strong>价格展示规则、状态转换、询价有效性、商品快照、语言路由和角色权限。</div>
+    <div class="q"><strong>集成测试</strong>发布商品、阿语生成、上传媒体、提交询价、分配线索、通知失败重试和 CSV 导出。</div>
+    <div class="q"><strong>端到端测试</strong>手机英文 / 阿语 RTL 完整选货与提交；商品售罄、重复提交、弱网和无 JavaScript 基础浏览。</div>
+    <div class="q"><strong>人工验收</strong>真实 Android / iPhone、WhatsApp 内置浏览器、主流桌面浏览器；目标国家网络条件下检查速度。</div>
+  </div>
+  <div class="note"><strong>性能目标：</strong>核心页面在目标市场手机网络下尽快显示主要商品内容；图片按尺寸和现代格式加载，视频不自动下载，商品与市场页面可被搜索引擎正确收录。</div>
+</div>
+
+<div class="panel">
+  <h3>第一版边界</h3>
+  <div class="scope"><div class="in"><h4>包含</h4><ul><li>双语前台与阿语 RTL</li><li>整批货 / 单款商品模板</li><li>货况优先详情页和可信贸易视觉</li><li>多商品询价清单主入口</li><li>WhatsApp 辅助与提交后跟进</li><li>轻量线索后台、分配、统计和导出</li><li>公司信任内容、市场落地页、SEO 与分析</li></ul></div><div class="out"><h4>暂不包含</h4><ul><li>客户注册、会员等级和登录后价格</li><li>在线支付、订单、合同和物流追踪</li><li>供应商入驻与多商家审核</li><li>自动运费、库存 ERP 实时同步</li><li>完整 CRM、营销自动化与聊天机器人</li><li>英语 / 阿语以外的人工维护语言</li></ul></div></div>
+</div>
+
+<p class="subtitle" style="margin-top:18px">请回到终端确认：技术边界、异常处理和测试策略是否正确？确认后即可形成完整设计规格。</p>
+</div>

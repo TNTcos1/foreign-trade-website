@@ -1,0 +1,52 @@
+<style>
+.wrap{max-width:1140px;margin:0 auto}.panel{border:1px solid var(--border-color,#d8d8d8);border-radius:16px;padding:19px;background:var(--card-bg,#fff);margin-top:18px}.panel h3{margin:0 0 5px}.caption{font-size:11px;color:#6b645b;margin-bottom:13px}.paths{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}.path{border-radius:15px;padding:18px}.path.wa{background:#e9f4ed;border:1px solid #bddac8}.path.list{background:#fff2e5;border:1px solid #e8caae}.path-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.path-head h3{margin:0}.badge{font-size:9px;font-weight:bold;border-radius:12px;padding:5px 8px;background:#fff}.flow{display:flex;align-items:stretch;gap:7px}.step{flex:1;min-width:0;background:rgba(255,255,255,.78);border-radius:9px;padding:10px 8px;font-size:9px;line-height:1.45}.step strong{display:block;font-size:10px;margin-bottom:4px}.arrow{align-self:center;font-size:16px;color:#7d604f}.message{background:#fff;border-radius:10px;padding:11px;margin-top:12px;font-size:10px;line-height:1.55;border:1px solid rgba(0,0,0,.08)}.message strong{color:#2c3a38}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}.input{background:#fff;border:1px solid #dfd5c7;border-radius:7px;padding:8px;font-size:9px}.required{color:#a64d31}.pipeline{display:flex;align-items:stretch;gap:7px;margin-top:14px}.stage{flex:1;border-radius:10px;padding:11px 9px;font-size:9px;line-height:1.4;background:#f5efe5}.stage strong{display:block;font-size:11px;margin-bottom:4px}.new{border-top:4px solid #a45b3d}.contacted{border-top:4px solid #d79d3b}.qualified{border-top:4px solid #4c7d6a}.quoted{border-top:4px solid #45718a}.won{border-top:4px solid #2c5d3f}.lost{border-top:4px solid #8a5750}.lead-card{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:10px;margin-top:13px}.group{border:1px solid #e0d6c8;border-radius:9px;padding:11px;background:#faf7f1;font-size:10px;line-height:1.55}.group strong{display:block;font-size:11px;color:#2c3a38;margin-bottom:4px}.notifications{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}.notify{border-radius:9px;padding:11px;background:#f5efe5;font-size:10px;line-height:1.45}.notify strong{display:block;font-size:11px;color:#2c3a38;margin-bottom:3px}.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:13px}.metric{border:1px solid #dfd5c7;border-radius:9px;padding:12px;text-align:center;background:#fff}.metric b{display:block;font-size:19px;color:#a45b3d;margin-bottom:4px}.metric span{font-size:9px;line-height:1.35}.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}.rule{border-radius:9px;padding:11px;background:#f8f2e9;font-size:10px;line-height:1.5}.rule strong{display:block;font-size:11px;margin-bottom:3px}.note{padding:12px 14px;border-left:4px solid #a45b3d;background:#fbf2e8;font-size:11px;line-height:1.55;margin-top:14px}@media(max-width:900px){.paths{grid-template-columns:1fr}.flow,.pipeline{flex-direction:column}.arrow{transform:rotate(90deg)}.lead-card{grid-template-columns:1fr}.notifications,.metrics,.rules{grid-template-columns:1fr 1fr}}
+</style>
+<div class="wrap">
+<h2>设计第 3 部分：询价、线索与业务跟进</h2>
+<p class="subtitle">WhatsApp 负责低阻力快速沟通，询价清单负责收集多个商品的结构化需求；两条路径都可归因和统计。</p>
+
+<div class="paths">
+  <div class="path wa">
+    <div class="path-head"><h3>路径 A · WhatsApp 快速询价</h3><span class="badge">主入口</span></div>
+    <div class="flow"><div class="step"><strong>点击商品按钮</strong>记录商品、语言、页面与来源渠道。</div><div class="arrow">→</div><div class="step"><strong>自动生成消息</strong>带商品编号、英文名和链接，客户可补充数量。</div><div class="arrow">→</div><div class="step"><strong>打开 WhatsApp</strong>连接指定业务号码，继续实时沟通。</div></div>
+    <div class="message"><strong>英文示例：</strong><br>Hello, I am interested in <b>LOT-1082 Mixed Summer Clothing Lot</b>.<br>Destination country: [please add]<br>Required quantity: [please add]<br>Product: globalstock.com/en/products/lot-1082</div>
+    <div class="note"><strong>现实边界：</strong>仅点击 WhatsApp 不能证明客户真的发出消息。因此后台分别统计“WhatsApp 点击”和“已确认有效对话”；后者由业务员在后台登记或更新状态。</div>
+  </div>
+
+  <div class="path list">
+    <div class="path-head"><h3>路径 B · 多商品询价清单</h3><span class="badge">结构化线索</span></div>
+    <div class="flow"><div class="step"><strong>加入清单</strong>客户可添加多个商品，无需登录，浏览器本地暂存。</div><div class="arrow">→</div><div class="step"><strong>填写采购信息</strong>逐项填写意向数量，也可删除或继续选货。</div><div class="arrow">→</div><div class="step"><strong>提交并继续联系</strong>后台生成线索，成功页提供 WhatsApp 按钮。</div></div>
+    <div class="form-grid"><div class="input">Name <span class="required">*</span></div><div class="input">Country <span class="required">*</span></div><div class="input">WhatsApp <span class="required">*</span></div><div class="input">Company</div><div class="input">Required quantity</div><div class="input">Target price</div><div class="input" style="grid-column:1/-1">Message / shipping preference</div></div>
+    <div class="note"><strong>提交保护：</strong>服务端校验必填项、号码格式、频率限制和机器人验证；成功后不重复提交，并返回询价编号。</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>后台线索记录</h3>
+  <div class="caption">不建设复杂 CRM，只保留成交跟进所需的最小信息。</div>
+  <div class="lead-card">
+    <div class="group"><strong>客户信息</strong>姓名、国家、语言、WhatsApp、公司、电话 / WeChat、首次与最近联系时间。</div>
+    <div class="group"><strong>采购需求</strong>商品编号与快照、意向数量、目标价、目的港 / 国家、客户留言、来源渠道与落地页。</div>
+    <div class="group"><strong>跟进信息</strong>负责人、状态、优先级、内部备注、下次跟进日期、报价金额 / 币种、流失原因。</div>
+  </div>
+  <div class="note"><strong>商品快照：</strong>询价提交时保存商品标题、状态、参考价格与数量快照。以后即使商品售罄或价格变化，业务员仍能知道客户当时看到的信息。</div>
+</div>
+
+<div class="panel">
+  <h3>最小销售管道</h3>
+  <div class="pipeline"><div class="stage new"><strong>新询盘</strong>表单刚提交，尚未联系。</div><div class="arrow">→</div><div class="stage contacted"><strong>已联系</strong>业务员已发送首条回复。</div><div class="arrow">→</div><div class="stage qualified"><strong>需求明确</strong>确认品类、数量和目的国。</div><div class="arrow">→</div><div class="stage quoted"><strong>已报价</strong>已提供价格与交易条件。</div><div class="arrow">→</div><div class="stage won"><strong>已成交</strong>进入线下合同、付款与出货。</div><div class="arrow">/</div><div class="stage lost"><strong>未成交</strong>记录无效、价格、库存等原因。</div></div>
+</div>
+
+<div class="panel">
+  <h3>通知、分配与权限</h3>
+  <div class="notifications"><div class="notify"><strong>即时通知</strong>新表单询价通过邮件通知指定人员；后台显示未读数量。</div><div class="notify"><strong>自动分配</strong>首版按语言或市场轮流分配，也允许管理员手动调整负责人。</div><div class="notify"><strong>业务员范围</strong>默认只看自己负责的线索；管理员可查看全部和重新分配。</div><div class="notify"><strong>防止遗漏</strong>新询盘超过设定时间未联系时，在后台标红提醒。</div></div>
+</div>
+
+<div class="panel">
+  <h3>前三个月核心统计</h3>
+  <div class="metrics"><div class="metric"><b>01</b><span>有效询盘数量与有效率</span></div><div class="metric"><b>02</b><span>WhatsApp 点击与确认对话</span></div><div class="metric"><b>03</b><span>询价表单提交率</span></div><div class="metric"><b>04</b><span>商品 / 国家 / 渠道询盘排行</span></div><div class="metric"><b>05</b><span>首次响应时间与成交状态</span></div></div>
+  <div class="rules"><div class="rule"><strong>有效询盘</strong>可联系号码有效，且至少选中商品或说明明确采购需求。</div><div class="rule"><strong>隐私同意</strong>表单明确说明信息仅用于报价与业务沟通，并链接隐私政策。</div><div class="rule"><strong>数据导出</strong>管理员可按日期、国家、业务员和状态导出 CSV，便于进一步分析。</div></div>
+</div>
+
+<p class="subtitle" style="margin-top:18px">请回到终端确认：WhatsApp、询价表单及后台跟进方式是否符合你的销售流程？</p>
+</div>

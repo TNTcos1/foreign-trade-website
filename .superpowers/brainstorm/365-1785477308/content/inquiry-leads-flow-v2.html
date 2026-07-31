@@ -1,0 +1,38 @@
+<style>
+.wrap{max-width:1140px;margin:0 auto}.decision{display:flex;align-items:center;gap:13px;padding:15px 17px;border-radius:13px;background:#2c3a38;color:#fff;margin:20px 0}.decision b{font-size:14px}.decision span{font-size:11px;opacity:.84}.primary-mark{background:#c56c48;color:#fff;border-radius:14px;padding:5px 8px;font-size:9px;font-weight:bold;white-space:nowrap}.paths{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}.path{border-radius:15px;padding:18px}.path.list{background:#fff2e5;border:2px solid #c56c48}.path.wa{background:#e9f4ed;border:1px solid #bddac8}.path-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.path-head h3{margin:0}.badge{font-size:9px;font-weight:bold;border-radius:12px;padding:5px 8px;background:#fff}.flow{display:flex;align-items:stretch;gap:7px}.step{flex:1;min-width:0;background:rgba(255,255,255,.8);border-radius:9px;padding:10px 8px;font-size:9px;line-height:1.45}.step strong{display:block;font-size:10px;margin-bottom:4px}.arrow{align-self:center;font-size:16px;color:#7d604f}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}.input{background:#fff;border:1px solid #dfd5c7;border-radius:7px;padding:8px;font-size:9px}.required{color:#a64d31}.message{background:#fff;border-radius:10px;padding:11px;margin-top:12px;font-size:10px;line-height:1.55;border:1px solid rgba(0,0,0,.08)}.panel{border:1px solid var(--border-color,#d8d8d8);border-radius:16px;padding:19px;background:var(--card-bg,#fff);margin-top:18px}.panel h3{margin:0 0 5px}.caption{font-size:11px;color:#6b645b;margin-bottom:13px}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:13px}.screen{border:1px solid #ded5c7;border-radius:12px;overflow:hidden;background:#f6f1e8}.bar{padding:10px 12px;background:#fff;font-size:8px;font-weight:bold}.product{padding:12px}.pic{height:96px;border-radius:7px;background:linear-gradient(135deg,#c1ae95,#796a59)}.product h4{font-family:Georgia,serif;font-size:15px;margin:9px 0 5px}.meta{font-size:8px;color:#625b52}.cta{display:grid;grid-template-columns:1fr .8fr;gap:6px;margin-top:10px}.btn{border-radius:5px;padding:9px 7px;text-align:center;font-size:8px;font-weight:bold}.main{background:#a44f34;color:#fff}.secondary{border:1px solid #4c7962;color:#315c48;background:#fff}.sticky{margin-top:8px;border-radius:7px;padding:9px;background:#2c3a38;color:#fff;text-align:center;font-size:8px;font-weight:bold}.hierarchy{display:grid;gap:8px}.rule{border-radius:9px;padding:11px;background:#f7f1e8;font-size:10px;line-height:1.5}.rule strong{display:block;font-size:11px;color:#2c3a38;margin-bottom:3px}.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:13px}.metric{border:1px solid #dfd5c7;border-radius:9px;padding:12px;text-align:center;background:#fff}.metric b{display:block;font-size:19px;color:#a45b3d;margin-bottom:4px}.metric span{font-size:9px;line-height:1.35}.note{padding:12px 14px;border-left:4px solid #a45b3d;background:#fbf2e8;font-size:11px;line-height:1.55;margin-top:14px}@media(max-width:900px){.paths,.buttons{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}.metrics{grid-template-columns:1fr 1fr}}
+</style>
+<div class="wrap">
+<h2>设计第 3 部分 · 修订：询价清单为主入口</h2>
+<div class="decision"><span class="primary-mark">已修订</span><div><b>客户先选多个货源并形成结构化需求，WhatsApp 用于提交后的快速跟进。</b><br><span>这样业务员收到的信息更完整，也能把多个商品归入同一次采购计划。</span></div></div>
+
+<div class="paths">
+  <div class="path list">
+    <div class="path-head"><h3>主路径 · 多商品询价清单</h3><span class="badge">PRIMARY</span></div>
+    <div class="flow"><div class="step"><strong>加入询价清单</strong>目录卡片和详情页主按钮；无需登录，本地暂存。</div><div class="arrow">→</div><div class="step"><strong>继续浏览</strong>顶部 / 底部固定显示已选数量，可随时查看或删除商品。</div><div class="arrow">→</div><div class="step"><strong>填写需求</strong>每个商品可填意向数量；再填国家、WhatsApp 和总体需求。</div><div class="arrow">→</div><div class="step"><strong>提交线索</strong>后台生成询价编号、客户资料、商品快照和来源记录。</div><div class="arrow">→</div><div class="step"><strong>继续沟通</strong>成功页一键打开 WhatsApp，并自动带上询价编号。</div></div>
+    <div class="form-grid"><div class="input">Name <span class="required">*</span></div><div class="input">Country <span class="required">*</span></div><div class="input">WhatsApp <span class="required">*</span></div><div class="input">Company</div><div class="input">Quantity for each item</div><div class="input">Target price / budget</div><div class="input" style="grid-column:1/-1">Destination port · purchase plan · message</div></div>
+  </div>
+
+  <div class="path wa">
+    <div class="path-head"><h3>辅助路径 · WhatsApp</h3><span class="badge">SECONDARY</span></div>
+    <div class="flow"><div class="step"><strong>详情页次按钮</strong>适合只对一个货源感兴趣或急需联系的客户。</div><div class="arrow">→</div><div class="step"><strong>询价成功页主跟进</strong>带询价编号、所选商品数量和页面链接。</div></div>
+    <div class="message"><strong>示例：</strong><br>Hello, I submitted inquiry <b>INQ-2026-0142</b> for 3 stock offers. Please check and contact me.<br>Inquiry link: globalstock.com/inquiry/confirmation</div>
+    <div class="note"><strong>保留原因：</strong>目标市场高度依赖 WhatsApp，完全取消会降低熟客和急单转化；但它不再与询价清单争夺视觉主位。</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>商品页与全站按钮层级</h3>
+  <div class="buttons">
+    <div class="screen"><div class="bar">PRODUCT DETAIL · MOBILE</div><div class="product"><div class="pic"></div><h4>Mixed Summer Clothing Lot</h4><div class="meta">Ready stock · 12,000 pcs · Ask price</div><div class="cta"><div class="btn main">＋ ADD TO INQUIRY LIST</div><div class="btn secondary">WHATSAPP</div></div><div class="sticky">INQUIRY LIST · 3 ITEMS →</div></div></div>
+    <div class="hierarchy"><div class="rule"><strong>目录商品卡</strong>主操作为“加入询价清单”；点击图片 / 标题进入详情。WhatsApp 不在卡片上抢占空间。</div><div class="rule"><strong>商品详情页</strong>“加入询价清单”为高对比主按钮；WhatsApp 为描边次按钮。</div><div class="rule"><strong>全站固定入口</strong>手机底部、桌面顶部显示询价清单数量；加入后给出“继续看货 / 查看清单”。</div><div class="rule"><strong>询价成功页</strong>提交完成后，WhatsApp 升级为主按钮，帮助业务员立即接续对话。</div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>后台与统计同步调整</h3>
+  <div class="metrics"><div class="metric"><b>01</b><span>加入询价清单率</span></div><div class="metric"><b>02</b><span>清单进入表单率</span></div><div class="metric"><b>03</b><span>表单完成率与放弃步骤</span></div><div class="metric"><b>04</b><span>每次询价平均商品数</span></div><div class="metric"><b>05</b><span>提交后 WhatsApp 跟进率</span></div></div>
+  <div class="note"><strong>有效询盘定义不变：</strong>提交可联系的 WhatsApp 号码，并至少包含一个商品或明确采购需求。业务员仍按“新询盘 → 已联系 → 需求明确 → 已报价 → 成交 / 未成交”推进。</div>
+</div>
+
+<p class="subtitle" style="margin-top:18px">请回到终端确认：修订后是否符合你的想法？</p>
+</div>

@@ -1,0 +1,112 @@
+<style>
+  .strategy-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:24px; }
+  .strategy { border:1px solid var(--border-color,#d8d8d8); border-radius:18px; overflow:hidden; cursor:pointer; background:var(--card-bg,#fff); transition:.2s ease; }
+  .strategy:hover { transform:translateY(-3px); box-shadow:0 14px 30px rgba(0,0,0,.08); }
+  .strategy.selected { outline:3px solid #d97706; border-color:transparent; }
+  .mini-browser { background:#f6f1e8; min-height:470px; color:#202020; font-family:Arial,sans-serif; }
+  .topbar { height:28px; background:#23282c; display:flex; align-items:center; padding:0 10px; gap:5px; }
+  .dot { width:6px; height:6px; border-radius:50%; background:#d6d6d6; opacity:.65; }
+  .nav { display:flex; justify-content:space-between; align-items:center; padding:11px 13px; background:#fff; border-bottom:1px solid #e6e0d7; font-size:8px; }
+  .brand { font-weight:900; font-size:12px; letter-spacing:.4px; }
+  .navlinks { display:flex; gap:8px; color:#555; }
+  .hero { padding:22px 16px; position:relative; overflow:hidden; }
+  .hero.dark { color:#fff; background:linear-gradient(120deg,#1e2528,#495254); }
+  .hero.terracotta { color:#fff; background:linear-gradient(120deg,#733c28,#c5703e); }
+  .hero.sand { background:linear-gradient(120deg,#eee4d2,#f9f4eb); }
+  .eyebrow { font-size:7px; font-weight:800; letter-spacing:1.2px; text-transform:uppercase; opacity:.8; }
+  .headline { font-family:Georgia,serif; font-size:23px; line-height:1.02; margin:8px 0 7px; max-width:88%; }
+  .hero-copy { font-size:8px; line-height:1.5; max-width:72%; opacity:.86; }
+  .actions { display:flex; gap:6px; margin-top:12px; }
+  .btn { padding:7px 9px; border-radius:4px; background:#d97706; color:#fff; font-size:7px; font-weight:bold; }
+  .btn.alt { background:transparent; border:1px solid currentColor; }
+  .truststrip { display:flex; justify-content:space-around; padding:10px 5px; background:#fff; border-bottom:1px solid #e6e0d7; font-size:6.5px; font-weight:bold; }
+  .section-title { padding:14px 13px 8px; font-family:Georgia,serif; font-size:13px; font-weight:bold; }
+  .products { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; padding:0 12px 14px; }
+  .product { background:#fff; border:1px solid #e4ddd2; border-radius:7px; overflow:hidden; }
+  .photo { height:60px; background:linear-gradient(135deg,#c7b296,#806f5f); position:relative; }
+  .photo.blue { background:linear-gradient(135deg,#b8c5c8,#64797e); }
+  .photo.red { background:linear-gradient(135deg,#d2aa97,#8d4e3c); }
+  .badge { position:absolute; top:5px; left:5px; background:#fff; color:#222; border-radius:9px; padding:3px 5px; font-size:5px; font-weight:bold; }
+  .product-info { padding:6px; font-size:6px; }
+  .product-name { font-size:7px; font-weight:bold; margin-bottom:3px; }
+  .country-row { display:flex; gap:5px; padding:0 12px 12px; }
+  .country { flex:1; border-radius:6px; background:#fff; border:1px solid #dfd6c8; padding:11px 5px; text-align:center; font-size:7px; font-weight:bold; }
+  .story { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:12px; }
+  .warehouse { min-height:104px; border-radius:8px; background:linear-gradient(135deg,#899092,#3f4749); display:flex; align-items:end; padding:9px; color:#fff; font-size:7px; font-weight:bold; }
+  .proof { background:#fff; border-radius:8px; padding:10px; font-size:6.5px; line-height:1.8; }
+  .card-copy { padding:16px 16px 18px; }
+  .card-copy h3 { margin:0 0 7px; font-size:16px; }
+  .card-copy p { margin:0; font-size:12px; line-height:1.55; }
+  .recommend { display:inline-block; margin-top:10px; padding:4px 7px; border-radius:10px; background:#fff2d8; color:#9a5900; font-size:10px; font-weight:bold; }
+  @media(max-width:900px){.strategy-grid{grid-template-columns:1fr}.mini-browser{min-height:auto}}
+</style>
+
+<h2>首页应该先让客户感受到什么？</h2>
+<p class="subtitle">三种策略都支持英语 / 阿拉伯语、现货 / 工厂预订、WhatsApp 询价。请选择最符合你生意方式的一种。</p>
+
+<div class="strategy-grid">
+  <div class="strategy" data-choice="a-inventory-first" onclick="toggleSelect(this)">
+    <div class="mini-browser">
+      <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="nav"><span class="brand">GLOBAL STOCK</span><span class="navlinks"><span>Stock Lots</span><span>Single Styles</span><span>EN / العربية</span></span></div>
+      <div class="hero dark">
+        <div class="eyebrow">Quanzhou Warehouse · Xiamen Port</div>
+        <div class="headline">Ready stock.<br>Factory-direct deals.</div>
+        <div class="hero-copy">Mixed clothing lots and selected styles for wholesale buyers worldwide.</div>
+        <div class="actions"><span class="btn">VIEW LATEST STOCK</span><span class="btn alt">WHATSAPP US</span></div>
+      </div>
+      <div class="truststrip"><span>VERIFIED STOCK</span><span>VIDEO INSPECTION</span><span>FLEXIBLE MOQ</span><span>GLOBAL SHIPPING</span></div>
+      <div class="section-title">Latest Opportunities</div>
+      <div class="products">
+        <div class="product"><div class="photo"><span class="badge">READY STOCK</span></div><div class="product-info"><div class="product-name">Mixed Summer Lot</div>12,000 pcs · Ask price</div></div>
+        <div class="product"><div class="photo blue"><span class="badge">FACTORY BOOKING</span></div><div class="product-info"><div class="product-name">Men's T-Shirts</div>$0.90–1.30 / pc</div></div>
+        <div class="product"><div class="photo red"><span class="badge">READY STOCK</span></div><div class="product-info"><div class="product-name">Kids Mixed Lot</div>480 cartons · Ask price</div></div>
+      </div>
+    </div>
+    <div class="card-copy"><h3>A. 货源优先型</h3><p>客户进入首页马上看到最新库存、数量、状态和价格区间，最适合业务员分享链接后快速促成询盘。</p><span class="recommend">推荐：最符合处理货业务</span></div>
+  </div>
+
+  <div class="strategy" data-choice="b-trust-first" onclick="toggleSelect(this)">
+    <div class="mini-browser">
+      <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="nav"><span class="brand">QZ GARMENT EXPORT</span><span class="navlinks"><span>About</span><span>Our Process</span><span>Stock</span></span></div>
+      <div class="hero terracotta">
+        <div class="eyebrow">Your sourcing partner since 2012</div>
+        <div class="headline">Real goods.<br>Real warehouse.</div>
+        <div class="hero-copy">Inspect by live video. Confirm quality before loading. Export support from Xiamen Port.</div>
+        <div class="actions"><span class="btn">HOW WE WORK</span><span class="btn alt">SEE STOCK</span></div>
+      </div>
+      <div class="story">
+        <div class="warehouse">WAREHOUSE & LOADING VIDEO ▶</div>
+        <div class="proof"><strong>Why buyers choose us</strong><br>✓ Company verified<br>✓ On-site QC<br>✓ Container loading proof<br>✓ Export documents<br>✓ Buyer references</div>
+      </div>
+      <div class="section-title">Recent Shipments</div>
+      <div class="country-row"><div class="country">YEMEN<br>40HQ</div><div class="country">UAE<br>2 × 40HQ</div><div class="country">INDIA<br>20GP</div></div>
+    </div>
+    <div class="card-copy"><h3>B. 信任优先型</h3><p>先展示仓库、装柜、资质和出货案例，最适合从展会、Google 搜索进入、尚未认识你们的新客户。</p></div>
+  </div>
+
+  <div class="strategy" data-choice="c-market-first" onclick="toggleSelect(this)">
+    <div class="mini-browser">
+      <div class="topbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="nav"><span class="brand">STOCK2WORLD</span><span class="navlinks"><span>Markets</span><span>Categories</span><span>Arabic</span></span></div>
+      <div class="hero sand">
+        <div class="eyebrow">Wholesale stock clothing</div>
+        <div class="headline">Stock selected<br>for your market.</div>
+        <div class="hero-copy">Browse offers matched to climate, price range and buying habits in your destination.</div>
+        <div class="actions"><span class="btn">CHOOSE YOUR MARKET</span><span class="btn alt" style="color:#222">ALL STOCK</span></div>
+      </div>
+      <div class="section-title">Shop by Destination</div>
+      <div class="country-row"><div class="country">MIDDLE EAST<br>عربي</div><div class="country">INDIA<br>ENGLISH</div><div class="country">CENTRAL ASIA<br>ENGLISH</div></div>
+      <div class="section-title">Popular for Middle East</div>
+      <div class="products">
+        <div class="product"><div class="photo red"></div><div class="product-info"><div class="product-name">Modest Dresses</div>Factory booking</div></div>
+        <div class="product"><div class="photo"></div><div class="product-info"><div class="product-name">Men's Basics</div>Ready stock</div></div>
+        <div class="product"><div class="photo blue"></div><div class="product-info"><div class="product-name">Family Mixed Lot</div>Ask price</div></div>
+      </div>
+    </div>
+    <div class="card-copy"><h3>C. 市场优先型</h3><p>客户先选择国家或地区，再看适合当地气候和消费习惯的货源；利于国家关键词 SEO，但日常分类维护更多。</p></div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:20px">点击一个方案选择。也可以在终端中告诉我：例如“选 A，但希望加入 B 的仓库实拍模块”。</p>

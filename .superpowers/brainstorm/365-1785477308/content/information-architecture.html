@@ -1,0 +1,52 @@
+<style>
+  .wrap{max-width:1120px;margin:0 auto}.summary{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}.panel{border:1px solid var(--border-color,#d8d8d8);border-radius:16px;padding:20px;background:var(--card-bg,#fff)}.panel h3{margin:0 0 12px}.tree{font-size:13px;line-height:1.5}.root{background:#2c3a38;color:#fff;border-radius:10px;padding:12px 14px;font-weight:bold}.branches{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.node{border:1px solid #dfd5c7;border-radius:9px;padding:10px;background:#faf6ee}.node strong{display:block;color:#7e402d;margin-bottom:4px}.node span{font-size:11px;color:#625c54}.flow{display:flex;align-items:stretch;gap:8px;margin-top:16px}.step{flex:1;min-width:0;border:1px solid #dfd5c7;border-radius:12px;padding:13px 10px;background:#fff}.num{width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2c3a38;color:#fff;font-size:11px;font-weight:bold;margin-bottom:8px}.step h4{font-size:12px;margin:0 0 5px}.step p{font-size:10px;line-height:1.45;margin:0;color:#686158}.arrow{align-self:center;color:#a45b3d;font-size:20px}.split-action{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.action{border-radius:8px;padding:9px;font-size:10px;font-weight:bold}.wa{background:#e4f2e9;color:#215f3c}.form{background:#fff0df;color:#894b24}.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.rule{padding:11px;border-radius:9px;background:#f5efe4;font-size:10px;line-height:1.4}.rule strong{display:block;font-size:11px;margin-bottom:3px;color:#2c3a38}.rtl{direction:rtl;text-align:right}@media(max-width:900px){.summary{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}.rules{grid-template-columns:1fr 1fr}}
+</style>
+<div class="wrap">
+<h2>设计第 1 部分：网站结构与询盘路径</h2>
+<p class="subtitle">公开浏览、无需登录；首页先展示新货，详情页先证明真实货况，最后以 WhatsApp 或询价清单完成转化。</p>
+
+<div class="summary">
+  <div class="panel">
+    <h3>公开页面地图</h3>
+    <div class="tree">
+      <div class="root">GLOBAL STOCK · English / العربية</div>
+      <div class="branches">
+        <div class="node"><strong>首页 Home</strong><span>最新现货、工厂预订、核心优势、信任证明</span></div>
+        <div class="node"><strong>货源目录 Stock</strong><span>整批货 / 单款库存 / 最新上架 / 条件筛选</span></div>
+        <div class="node"><strong>商品详情 Product</strong><span>真实图片视频、货源状态、数量包装、价格 / 询价</span></div>
+        <div class="node"><strong>询价清单 Inquiry List</strong><span>汇总多个商品，填写采购数量和目的国后提交</span></div>
+        <div class="node"><strong>信任中心 Why Us</strong><span>公司资质、泉州仓库、质检、装柜、成交案例</span></div>
+        <div class="node"><strong>交易指南 How to Buy</strong><span>验货、报价、付款、备货、厦门港出运、常见问题</span></div>
+        <div class="node"><strong>市场落地页 Markets</strong><span>中东、也门、印度、中南亚主题页，用于 SEO 与分享</span></div>
+        <div class="node"><strong>联系我们 Contact</strong><span>WhatsApp、WeChat、电话、社交媒体、简短表单</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>语言与设备规则</h3>
+    <div class="node"><strong>英语默认</strong><span>适用于印度、中南亚及国际客户；URL 独立，便于 Google 收录。</span></div>
+    <div class="node rtl" style="margin-top:8px"><strong>العربية · 阿拉伯语 RTL</strong><span>完整从右到左布局，不只是翻译文字；使用独立阿语 URL。</span></div>
+    <div class="node" style="margin-top:8px"><strong>手机优先</strong><span>商品卡片、视频与按钮先适配 WhatsApp 内置浏览器；桌面端用于详细比较。</span></div>
+    <div class="node" style="margin-top:8px"><strong>无需注册</strong><span>浏览、收藏到询价清单、提交询价均免登录，减少海外客户流失。</span></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>从访问到有效询盘</h3>
+  <div class="flow">
+    <div class="step"><div class="num">1</div><h4>进入网站</h4><p>业务员 / 社媒商品链接、展会二维码、Google 搜索或市场落地页。</p></div><div class="arrow">→</div>
+    <div class="step"><div class="num">2</div><h4>快速筛货</h4><p>按整批 / 单款、现货 / 预订、品类、MOQ、价格区间和采购单位筛选。</p></div><div class="arrow">→</div>
+    <div class="step"><div class="num">3</div><h4>验证货况</h4><p>先看真实仓库图片和视频，再看数量、包装、质量说明、发货地与交期。</p></div><div class="arrow">→</div>
+    <div class="step"><div class="num">4</div><h4>发起询盘</h4><div class="split-action"><div class="action wa">WhatsApp<br>单品快速联系</div><div class="action form">询价清单<br>多商品提交</div></div></div><div class="arrow">→</div>
+    <div class="step"><div class="num">5</div><h4>业务员跟进</h4><p>后台记录来源、国家、语言、商品和数量；业务员按状态跟进并备注结果。</p></div>
+  </div>
+  <div class="rules">
+    <div class="rule"><strong>WhatsApp 自动带信息</strong>商品编号、英文名称、页面链接和客户语言。</div>
+    <div class="rule"><strong>表单最少字段</strong>姓名、国家、WhatsApp 必填；公司、数量、目标价和备注选填。</div>
+    <div class="rule"><strong>有效询盘定义</strong>留下可联系号码，并至少选择商品或填写明确采购需求。</div>
+    <div class="rule"><strong>提交后不中断</strong>显示成功页，并提供一键 WhatsApp 继续沟通。</div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:18px">请回到终端确认：这套页面结构和询盘路径是否正确？如需修改，请指出页面或步骤。</p>
+</div>
