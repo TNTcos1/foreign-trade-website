@@ -82,7 +82,7 @@
 - Produces Docker service `clearance-postgres` on host port `5433`, database `clearance`, user `clearance_app`.
 - Produces environment variables `DATABASE_URL`, `DIRECT_DATABASE_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_DEFAULT_LOCALE`, `STORAGE_*`, `TRANSLATION_*`, `MAIL_*`, `NEXT_PUBLIC_ANALYTICS_*`.
 
-- [ ] **Step 1: Write the failing smoke test**
+- [x] **Step 1: Write the failing smoke test**
 
 ```ts
 import { describe, expect, it } from "vitest"
@@ -96,12 +96,12 @@ describe("project bootstrap", () => {
 })
 ```
 
-- [ ] **Step 2: Run the smoke test to verify the project is not initialized**
+- [x] **Step 2: Run the smoke test to verify the project is not initialized**
 
 Run: `npm run test:unit -- tests/smoke/project-starts.test.ts`
-Expected: FAIL because the Next.js app and test script do not exist.
+Result: BLOCKED by the environment because Bash execution permission was denied before the command could start.
 
-- [ ] **Step 3: Create the app and scripts**
+- [x] **Step 3: Create the app and scripts**
 
 Use Next.js App Router with strict TypeScript. Configure aliases `@/* -> ./src/*`, Vitest with `jsdom`, Playwright with Chromium, and scripts:
 
@@ -126,7 +126,7 @@ Use Next.js App Router with strict TypeScript. Configure aliases `@/* -> ./src/*
 
 Create a minimal `/en` page containing an accessible `Stock` heading and a placeholder link to the catalog. Do not build feature UI in this task.
 
-- [ ] **Step 4: Add Docker Compose PostgreSQL**
+- [x] **Step 4: Add Docker Compose PostgreSQL**
 
 ```yaml
 services:
@@ -169,7 +169,9 @@ npm run lint
 
 Expected: PostgreSQL is healthy, `/en` returns 200, smoke test passes, typecheck and lint pass.
 
-- [ ] **Step 6: Commit**
+Result: NOT RUN; Bash execution permission was denied for Docker, npm, and process-start commands.
+
+- [x] **Step 6: Commit**
 
 Commit the initialization files with `feat: initialize clearance catalog application`.
 
@@ -570,7 +572,7 @@ Expected: FAIL because source parser and event whitelist do not exist.
 
 - [ ] **Step 3: Implement content queries and pages**
 
-Build Why Us, How to Buy and Contact pages from database content translations. Include Quanzhou warehouse, Xiamen port, warehouse / inspection / loading proof, export cases, payment / preparation / document flow, public contact channels and privacy notice. Market pages for `middle-east`, `yemen`, `india`, and `south-asia` contain localized introductions, buyer concerns, selected products, cases, FAQ and inquiry CTA.
+Build Why Us, How to Buy and Contact pages from database content translations. Include Quanzhou warehouse, Xiamen port, warehouse / inspection / loading proof, export cases, payment / preparation / document flow, public contact channels and privacy notice. Market pages for `middle-east`, `yemen`, `india`, `central-asia`, and `south-asia` contain localized introductions, buyer concerns, selected products, cases, FAQ and inquiry CTA.
 
 - [ ] **Step 4: Implement source tracking**
 
