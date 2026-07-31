@@ -72,6 +72,7 @@
 - Create: `.env.example`
 - Create: `.gitignore`
 - Create: `src/app/page.tsx`
+- Create: `src/app/en/page.tsx`
 - Create: `src/app/globals.css`
 - Create: `tests/smoke/project-starts.test.ts`
 - Modify: `docs/superpowers/specs/2026-07-31-clothing-clearance-website-design.md`
@@ -112,7 +113,7 @@ Use Next.js App Router with strict TypeScript. Configure aliases `@/* -> ./src/*
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test:unit": "vitest run tests/unit",
+    "test:unit": "vitest run --exclude tests/integration/** --exclude tests/e2e/**",
     "test:integration": "vitest run tests/integration",
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
@@ -982,4 +983,4 @@ After all verification, commit with `chore: prepare first release deployment`.
 - 安全、隐私、限流、CSRF、上传和日志：Task 7、Task 10。
 - 异常处理、健康检查、备份、恢复、部署和验收：Task 5、Task 9、Task 10、Task 11。
 - 第一版不包含的支付、账户、供应商、ERP、完整 CRM 和聊天机器人没有出现在实施任务中。
-- 计划中没有 `TBD`、`TODO`、`FIXME` 或未定义的跨任务函数；所有跨模块接口在对应任务中声明。
+- 占位符扫描已通过，跨任务函数均在对应任务中声明。
