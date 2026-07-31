@@ -3,9 +3,9 @@ node_modules/
 coverage/
 playwright-report/
 test-results/
-.env
-.env.local
-.env.*.local
+.env*
+!.env.example
+npm-debug.log*
 .superpowers/sdd/
 .worktrees/
 .superpowers/brainstorm/.last-port
