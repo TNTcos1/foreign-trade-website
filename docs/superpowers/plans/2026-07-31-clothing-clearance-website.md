@@ -170,7 +170,7 @@ Expected: PostgreSQL is healthy, `/en` returns 200, smoke test passes, typecheck
 
 - [ ] **Step 6: Commit**
 
-Do not commit unless the user explicitly asks for a commit. If commits are later requested, commit only the initialization files with `feat: initialize clearance catalog application`.
+Commit the initialization files with `feat: initialize clearance catalog application`.
 
 ---
 
@@ -265,7 +265,7 @@ Expected: migration applies, seed is idempotent, the database contains both prod
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, commit schema, migration, seed, domain files and tests with `feat: add catalog and inquiry data model`.
+Commit schema, migration, seed, domain files and tests with `feat: add catalog and inquiry data model`.
 
 ---
 
@@ -340,7 +340,7 @@ Use the browser to verify `/en`, `/ar`, mobile layout, direction, navigation foc
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add bilingual public layout and visual system`.
+Commit with `feat: add bilingual public layout and visual system`.
 
 ---
 
@@ -424,7 +424,7 @@ Use the browser to verify English and Arabic pages, RTL detail layout, real-medi
 
 - [ ] **Step 8: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add public catalog and product pages`.
+Commit with `feat: add public catalog and product pages`.
 
 ---
 
@@ -517,7 +517,7 @@ Use the browser to test add / update / remove / continue browsing, duplicate cli
 
 - [ ] **Step 8: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add multi-product inquiry flow`.
+Commit with `feat: add multi-product inquiry flow`.
 
 ---
 
@@ -594,7 +594,7 @@ Verify English / Arabic content, RTL layout, market page links, QR source query 
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add trust content, market pages, and SEO tracking`.
+Commit with `feat: add trust content, market pages, and SEO tracking`.
 
 ---
 
@@ -665,7 +665,7 @@ Expected: invalid uploads reject safely, valid media receives random keys and va
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add media and translation adapters`.
+Commit with `feat: add media and translation adapters`.
 
 ---
 
@@ -748,7 +748,7 @@ Use the browser to verify login, role boundaries, product draft / preview / publ
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add admin authentication and content management`.
+Commit with `feat: add admin authentication and content management`.
 
 ---
 
@@ -823,7 +823,7 @@ Verify new inquiry notification, assignment fallback, sales scope, response warn
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, use `feat: add inquiry pipeline and sales follow-up`.
+Commit with `feat: add inquiry pipeline and sales follow-up`.
 
 ---
 
@@ -895,7 +895,7 @@ Additionally run an authenticated / unauthenticated route matrix, upload rejecti
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested, use `fix: harden public and admin security boundaries`.
+Commit with `fix: harden public and admin security boundaries`.
 
 ---
 
@@ -967,7 +967,7 @@ Only after all acceptance checks pass, update the design spec status to `实施�
 
 - [ ] **Step 7: Commit**
 
-Do not commit unless explicitly requested. If requested after all verification, use `chore: prepare first release deployment`.
+After all verification, commit with `chore: prepare first release deployment`.
 
 ---
 
