@@ -1,0 +1,363 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+enum Locale {
+  en
+  ar
+}
+
+enum ProductType {
+  STOCK_LOT
+  SINGLE_STYLE
+}
+
+enum ProductStatus {
+  DRAFT
+  READY_STOCK
+  FACTORY_BOOKING
+  SOLD_OUT
+  ARCHIVED
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  SALES
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  QUOTED
+  WON
+  LOST
+}
+
+model Product {
+  id                   String               @id @default(uuid()) @db.Uuid
+  code                 String               @unique
+  type                 ProductType
+  status               ProductStatus        @default(DRAFT)
+  category             String
+  genderAge            String?
+  season               String?
+  tags                 String[]             @default([])
+  sourceType           String?
+  sourceLocation       String?
+  qualityGrade         String?
+  clearanceReason      String?
+  defectNotes          String?
+  inspectionAvailable  Boolean              @default(false)
+  purchaseUnit         String
+  minimumOrderQuantity Int?
+  tradeTerms           String?
+  currency             String               @default("USD")
+  referencePriceMin    Decimal?             @db.Decimal(12, 2)
+  referencePriceMax    Decimal?             @db.Decimal(12, 2)
+  priceBasis           String?
+  availableQuantity    Int?
+  lastVerifiedAt       DateTime?
+  publishedAt          DateTime?
+  archivedAt           DateTime?
+  createdById          String?              @db.Uuid
+  updatedById          String?              @db.Uuid
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  createdBy            AdminUser?           @relation("ProductsCreated", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy            AdminUser?           @relation("ProductsUpdated", fields: [updatedById], references: [id], onDelete: SetNull)
+  translations         ProductTranslation[]
+  media                ProductMedia[]
+  stockLotDetails      StockLotDetails?
+  singleStyleDetails   SingleStyleDetails?
+  variants             ProductVariant[]
+  inquiryItems         InquiryItem[]
+  marketProducts       MarketProduct[]
+  sourceVisits         SourceVisit[]        @relation("FirstProduct")
+
+  @@index([status, publishedAt])
+  @@index([type, status])
+  @@index([lastVerifiedAt])
+}
+
+model ProductTranslation {
+  id             String   @id @default(uuid()) @db.Uuid
+  productId      String   @db.Uuid
+  locale         Locale
+  title          String
+  summary        String
+  description    String
+  seoTitle       String?
+  seoDescription String?
+  shareImageAlt  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, locale])
+}
+
+model ProductMedia {
+  id        String   @id @default(uuid()) @db.Uuid
+  productId String   @db.Uuid
+  mediaType String
+  url       String
+  altText   String?
+  metadata  Json?
+  sortOrder Int      @default(0)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, sortOrder])
+}
+
+model StockLotDetails {
+  productId             String   @id @db.Uuid
+  totalPieces           Int
+  totalPackages         Int?
+  totalWeightKg         Decimal? @db.Decimal(12, 2)
+  totalVolumeCbm        Decimal? @db.Decimal(12, 3)
+  categoryComposition   Json?
+  sizeRange             String?
+  piecesPerPackage      Int?
+  containerLoadEstimate Json?
+  product               Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model SingleStyleDetails {
+  productId           String  @id @db.Uuid
+  styleNumber         String
+  fabric              String?
+  styleNotes          String?
+  piecesPerCarton     Int?
+  factoryLeadTimeDays Int?
+  product             Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductVariant {
+  id                String   @id @default(uuid()) @db.Uuid
+  productId         String   @db.Uuid
+  sku               String
+  color             String
+  size              String
+  availableQuantity Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, sku])
+}
+
+model Inquiry {
+  id                       String                @id @default(uuid()) @db.Uuid
+  number                   String                @unique
+  status                   LeadStatus            @default(NEW)
+  locale                   Locale                @default(en)
+  customerName             String
+  country                  String
+  whatsapp                 String
+  company                  String?
+  phone                    String?
+  wechat                   String?
+  targetPrice              Decimal?              @db.Decimal(12, 2)
+  budget                   Decimal?              @db.Decimal(14, 2)
+  currency                 String                @default("USD")
+  destinationPort          String?
+  requirement              String?
+  transportationPreference String?
+  internalNotes            String?
+  priority                 Int                   @default(0)
+  assignedToId             String?               @db.Uuid
+  sourceVisitId            String?               @unique @db.Uuid
+  firstContactAt           DateTime?
+  lastContactAt            DateTime?
+  nextFollowUpAt           DateTime?
+  quoteAmount              Decimal?              @db.Decimal(14, 2)
+  wonLostReason            String?
+  deduplicationKey         String?               @unique
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+  assignedTo               AdminUser?            @relation("AssignedInquiries", fields: [assignedToId], references: [id], onDelete: SetNull)
+  sourceVisit              SourceVisit?          @relation(fields: [sourceVisitId], references: [id], onDelete: SetNull)
+  items                    InquiryItem[]
+  events                   InquiryEvent[]
+  assignments              LeadAssignment[]
+  notificationAttempts     NotificationAttempt[]
+
+  @@index([status, createdAt])
+  @@index([assignedToId, status])
+}
+
+model InquiryItem {
+  id                String   @id @default(uuid()) @db.Uuid
+  inquiryId         String   @db.Uuid
+  productId         String?  @db.Uuid
+  requestedQuantity Int?
+  snapshot          Json
+  createdAt         DateTime @default(now())
+  inquiry           Inquiry  @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  product           Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([inquiryId])
+}
+
+model InquiryEvent {
+  id        String     @id @default(uuid()) @db.Uuid
+  inquiryId String     @db.Uuid
+  authorId  String?    @db.Uuid
+  eventType String
+  details   Json?
+  createdAt DateTime   @default(now())
+  inquiry   Inquiry    @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  author    AdminUser? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([inquiryId, createdAt])
+}
+
+model LeadAssignment {
+  id           String     @id @default(uuid()) @db.Uuid
+  inquiryId    String     @db.Uuid
+  assignedToId String     @db.Uuid
+  assignedById String?    @db.Uuid
+  reason       String?
+  createdAt    DateTime   @default(now())
+  inquiry      Inquiry    @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  assignedTo   AdminUser  @relation("AssignmentsReceived", fields: [assignedToId], references: [id], onDelete: Restrict)
+  assignedBy   AdminUser? @relation("AssignmentsMade", fields: [assignedById], references: [id], onDelete: SetNull)
+
+  @@index([inquiryId, createdAt])
+  @@index([assignedToId, createdAt])
+}
+
+model ContentPage {
+  id           String               @id @default(uuid()) @db.Uuid
+  slug         String               @unique
+  pageType     String
+  publishedAt  DateTime?
+  createdById  String?              @db.Uuid
+  updatedById  String?              @db.Uuid
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  createdBy    AdminUser?           @relation("ContentPagesCreated", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedBy    AdminUser?           @relation("ContentPagesUpdated", fields: [updatedById], references: [id], onDelete: SetNull)
+  translations ContentTranslation[]
+  marketPage   MarketPage?
+}
+
+model ContentTranslation {
+  id             String      @id @default(uuid()) @db.Uuid
+  contentPageId  String      @db.Uuid
+  locale         Locale
+  title          String
+  summary        String?
+  body           String
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  contentPage    ContentPage @relation(fields: [contentPageId], references: [id], onDelete: Cascade)
+
+  @@unique([contentPageId, locale])
+}
+
+model MarketPage {
+  id            String          @id @default(uuid()) @db.Uuid
+  contentPageId String          @unique @db.Uuid
+  marketCode    String          @unique
+  sourceTag     String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  contentPage   ContentPage     @relation(fields: [contentPageId], references: [id], onDelete: Cascade)
+  products      MarketProduct[]
+  sourceVisits  SourceVisit[]
+}
+
+model MarketProduct {
+  marketPageId String     @db.Uuid
+  productId    String     @db.Uuid
+  sortOrder    Int        @default(0)
+  featured     Boolean    @default(false)
+  marketPage   MarketPage @relation(fields: [marketPageId], references: [id], onDelete: Cascade)
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([marketPageId, productId])
+  @@index([marketPageId, sortOrder])
+}
+
+model AdminUser {
+  id                  String           @id @default(uuid()) @db.Uuid
+  email               String           @unique
+  name                String
+  passwordHash        String
+  role                UserRole
+  active              Boolean          @default(true)
+  developmentOnly     Boolean          @default(false)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  createdProducts     Product[]        @relation("ProductsCreated")
+  updatedProducts     Product[]        @relation("ProductsUpdated")
+  assignedInquiries   Inquiry[]        @relation("AssignedInquiries")
+  inquiryEvents       InquiryEvent[]
+  assignmentsReceived LeadAssignment[] @relation("AssignmentsReceived")
+  assignmentsMade     LeadAssignment[] @relation("AssignmentsMade")
+  createdContentPages ContentPage[]    @relation("ContentPagesCreated")
+  updatedContentPages ContentPage[]    @relation("ContentPagesUpdated")
+}
+
+model TermTranslation {
+  id        String   @id @default(uuid()) @db.Uuid
+  termKey   String
+  locale    Locale
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([termKey, locale])
+}
+
+model SourceVisit {
+  id             String      @id @default(uuid()) @db.Uuid
+  sessionId      String
+  channel        String
+  campaign       String?
+  source         String?
+  medium         String?
+  landingPage    String
+  firstProductId String?     @db.Uuid
+  marketPageId   String?     @db.Uuid
+  referrer       String?
+  metadata       Json?
+  createdAt      DateTime    @default(now())
+  firstProduct   Product?    @relation("FirstProduct", fields: [firstProductId], references: [id], onDelete: SetNull)
+  marketPage     MarketPage? @relation(fields: [marketPageId], references: [id], onDelete: SetNull)
+  inquiry        Inquiry?
+
+  @@index([sessionId, createdAt])
+}
+
+model NotificationAttempt {
+  id                String    @id @default(uuid()) @db.Uuid
+  inquiryId         String    @db.Uuid
+  channel           String
+  recipient         String
+  status            String
+  attemptNumber     Int       @default(1)
+  providerMessageId String?
+  errorMessage      String?
+  nextAttemptAt     DateTime?
+  sentAt            DateTime?
+  createdAt         DateTime  @default(now())
+  inquiry           Inquiry   @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextAttemptAt])
+  @@index([inquiryId, createdAt])
+}

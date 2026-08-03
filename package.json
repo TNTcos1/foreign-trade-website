@@ -16,8 +16,13 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "@tailwindcss/postcss": "^4.1.11",
+    "bcryptjs": "^3.0.3",
     "next": "^15.4.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
@@ -31,6 +36,8 @@
     "eslint": "^9.32.0",
     "eslint-config-next": "^15.4.5",
     "jsdom": "^26.1.0",
+    "prisma": "^6.19.3",
+    "tsx": "^4.23.5",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
