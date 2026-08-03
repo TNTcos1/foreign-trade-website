@@ -10,7 +10,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - clearance-postgres-data:/var/lib/postgresql/data
+      - clearance-postgres-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U clearance_app -d clearance"]
       interval: 5s

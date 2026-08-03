@@ -6,6 +6,7 @@ test-results/
 .env*
 !.env.example
 npm-debug.log*
+*.tsbuildinfo
 .superpowers/sdd/
 .worktrees/
 .superpowers/brainstorm/.last-port

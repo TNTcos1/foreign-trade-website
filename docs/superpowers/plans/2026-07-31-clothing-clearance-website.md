@@ -141,7 +141,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - clearance-postgres-data:/var/lib/postgresql/data
+      - clearance-postgres-data:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U clearance_app -d clearance"]
       interval: 5s
@@ -153,7 +153,7 @@ volumes:
 
 Use `postgresql://clearance_app:local-development-only@localhost:5433/clearance` in `.env.example`; never commit real credentials.
 
-- [ ] **Step 5: Run the smallest verification**
+- [x] **Step 5: Run the smallest verification**
 
 Run:
 
@@ -169,7 +169,7 @@ npm run lint
 
 Expected: PostgreSQL is healthy, `/en` returns 200, smoke test passes, typecheck and lint pass.
 
-Result: NOT RUN; Bash execution permission was denied for Docker, npm, and process-start commands.
+Result: PASS after controller verification; PostgreSQL 18 is healthy, `/en` returns 200, the smoke test passes, and typecheck and lint pass.
 
 - [x] **Step 6: Commit**
 
