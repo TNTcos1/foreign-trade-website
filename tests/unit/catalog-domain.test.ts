@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import { describe, expect, it } from "vitest"
 import {
   canAddToInquiry,
@@ -53,5 +54,20 @@ describe("catalog rules", () => {
         priceBasis: null,
       }),
     ).toEqual({ kind: "CONTACT_FOR_QUOTE" })
+    expect(
+      formatPriceVisibility({
+        type: "SINGLE_STYLE",
+        currency: "USD",
+        referencePriceMin: new Prisma.Decimal("2.40"),
+        referencePriceMax: new Prisma.Decimal("2.85"),
+        priceBasis: "per piece",
+      }),
+    ).toEqual({
+      kind: "REFERENCE_PRICE",
+      currency: "USD",
+      minimum: "2.4",
+      maximum: "2.85",
+      basis: "per piece",
+    })
   })
 })

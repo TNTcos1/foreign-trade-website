@@ -1,4 +1,4 @@
-import type { ProductStatus, ProductType } from "@prisma/client"
+import type { Prisma, ProductStatus, ProductType } from "@prisma/client"
 
 export { isEffectiveInquiry } from "@/modules/inquiries/domain"
 export type { InquiryItemSnapshot, InquiryValidityInput } from "@/modules/inquiries/domain"
@@ -6,8 +6,8 @@ export type { InquiryItemSnapshot, InquiryValidityInput } from "@/modules/inquir
 export type PriceVisibilityProduct = {
   type: ProductType
   currency: string
-  referencePriceMin: number | string | null
-  referencePriceMax: number | string | null
+  referencePriceMin: Prisma.Decimal | number | string | null
+  referencePriceMax: Prisma.Decimal | number | string | null
   priceBasis: string | null
 }
 

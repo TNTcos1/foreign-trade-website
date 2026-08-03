@@ -1,8 +1,8 @@
 import { PrismaClient, type Locale, type ProductStatus, type ProductType, type UserRole } from "@prisma/client"
+import { hash } from "bcryptjs"
+import { getDevelopmentSeedPassword } from "./development-seed-policy"
 
 const prisma = new PrismaClient()
-
-const DEVELOPMENT_PASSWORD_HASH = "$2b$12$3AhvdmPmdFaIfsWSrh1xcejPPXKYOK6CfMW6E1gGwXt4nYN5AOaYa"
 const PUBLISHED_AT = new Date("2026-07-31T08:00:00.000Z")
 const LAST_VERIFIED_AT = new Date("2026-07-31T07:30:00.000Z")
 
@@ -189,6 +189,8 @@ const productSeeds = [
 }>
 
 async function seed() {
+  const developmentPassword = getDevelopmentSeedPassword(process.env)
+  const developmentPasswordHash = await hash(developmentPassword, 12)
   const seededUsers = new Map<UserRole, string>()
 
   for (const user of users) {
@@ -196,14 +198,14 @@ async function seed() {
       where: { email: user.email },
       update: {
         name: user.name,
-        passwordHash: DEVELOPMENT_PASSWORD_HASH,
+        passwordHash: developmentPasswordHash,
         role: user.role,
         active: true,
         developmentOnly: true,
       },
       create: {
         ...user,
-        passwordHash: DEVELOPMENT_PASSWORD_HASH,
+        passwordHash: developmentPasswordHash,
         active: true,
         developmentOnly: true,
       },
