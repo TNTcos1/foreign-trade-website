@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { InquiryListLink } from "@/components/public/inquiry-list-link"
 import { LocaleSwitcher } from "@/components/public/locale-switcher"
@@ -15,6 +15,31 @@ type SiteHeaderProps = {
 export function SiteHeader({ locale }: SiteHeaderProps) {
   const dictionary = getDictionary(locale)
   const [menuOpen, setMenuOpen] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const firstNavigationLinkRef = useRef<HTMLAnchorElement>(null)
+
+  useEffect(() => {
+    if (menuOpen) {
+      firstNavigationLinkRef.current?.focus()
+    }
+  }, [menuOpen])
+
+  useEffect(() => {
+    if (!menuOpen) {
+      return
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMenuOpen(false)
+        menuButtonRef.current?.focus()
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [menuOpen])
+
   const navigation = [
     [dictionary.navigation.catalog, `/${locale}/catalog`],
     [dictionary.navigation.stockLots, `/${locale}/stock-lots`],
@@ -46,8 +71,16 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
           aria-label={dictionary.accessibility.mainNavigation}
           data-open={menuOpen}
         >
-          {navigation.map(([label, href]) => (
-            <Link key={href} href={href} onClick={() => setMenuOpen(false)}>
+          {navigation.map(([label, href], index) => (
+            <Link
+              key={href}
+              ref={index === 0 ? firstNavigationLinkRef : undefined}
+              href={href}
+              onClick={() => {
+                setMenuOpen(false)
+                menuButtonRef.current?.focus()
+              }}
+            >
               {label}
             </Link>
           ))}
@@ -59,6 +92,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
         </div>
 
         <button
+          ref={menuButtonRef}
           className="menu-button"
           type="button"
           aria-controls="site-navigation"

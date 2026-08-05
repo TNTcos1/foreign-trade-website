@@ -12,11 +12,12 @@
   --color-paper: #fffdf8;
   --color-terracotta: #b9563d;
   --color-terracotta-dark: #90402e;
+  --color-terracotta-light: #f0b09a;
   --color-ink: #17221e;
   --color-muted: #5d6863;
   --color-border: #b9b7aa;
   --color-border-strong: #777d74;
-  --color-focus: #d46e4f;
+  --color-focus: #90402e;
   --color-status-ready: #1f7055;
   --color-status-ready-bg: #dcece5;
   --color-status-booking: #9b5a24;
@@ -354,7 +355,7 @@ button {
 
 .eyebrow {
   margin-block-end: 1.25rem;
-  color: var(--color-terracotta);
+  color: var(--color-terracotta-dark);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.15em;
@@ -363,6 +364,15 @@ button {
 
 [dir="rtl"] .eyebrow {
   letter-spacing: 0;
+}
+
+.trade-hero .eyebrow {
+  color: var(--color-terracotta-light);
+}
+
+.trade-hero a:focus-visible,
+.trade-hero button:focus-visible {
+  outline-color: var(--color-warm-white);
 }
 
 .trade-hero h1 {
@@ -560,6 +570,10 @@ button {
   color: var(--color-warm-white);
 }
 
+.supply-card:hover:focus-visible {
+  outline-color: var(--color-warm-white);
+}
+
 .supply-card__index {
   font-size: 0.72rem;
   font-weight: 800;
@@ -594,6 +608,14 @@ button {
   color: var(--color-sand-300);
 }
 
+.directional-arrow {
+  display: inline-block;
+}
+
+[dir="rtl"] .directional-arrow {
+  transform: scaleX(-1);
+}
+
 .trade-contact {
   background: var(--color-terracotta);
   color: white;
@@ -606,7 +628,12 @@ button {
 }
 
 .trade-contact .eyebrow {
-  color: var(--color-green-950);
+  color: white;
+}
+
+.trade-contact a:focus-visible,
+.trade-contact button:focus-visible {
+  outline-color: var(--color-warm-white);
 }
 
 .trade-contact h2 {
@@ -661,6 +688,13 @@ button {
 
 .site-footer a:hover {
   color: var(--color-sand-300);
+}
+
+.site-footer a:focus-visible,
+.site-footer button:focus-visible,
+.not-found-page a:focus-visible,
+.not-found-page button:focus-visible {
+  outline-color: var(--color-warm-white);
 }
 
 .site-footer__intro .brand-line {

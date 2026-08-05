@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function LocaleNotFound() {
   return (
-    <main className="not-found-page">
+    <main id="main-content" className="not-found-page" tabIndex={-1}>
       <div className="page-shell not-found-page__panel">
         <p className="eyebrow">404 · ٤٠٤</p>
         <h1>Page not found · الصفحة غير موجودة</h1>

@@ -19,7 +19,7 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
   const dictionary = getDictionary(locale)
 
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <section className="trade-hero">
         <div className="page-shell trade-hero__grid">
           <div className="trade-hero__copy">
@@ -71,13 +71,23 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
             <span className="supply-card__index">A — 01</span>
             <h3>{dictionary.navigation.stockLots}</h3>
             <p>{dictionary.trade.lotDescription}</p>
-            <span className="supply-card__action">{dictionary.trade.browseCatalog} →</span>
+            <span className="supply-card__action">
+              <span>{dictionary.trade.browseCatalog}</span>
+              <span className="directional-arrow" aria-hidden="true">
+                →
+              </span>
+            </span>
           </Link>
           <Link className="supply-card supply-card--sand" href={`/${locale}/single-styles`}>
             <span className="supply-card__index">B — 02</span>
             <h3>{dictionary.navigation.singleStyles}</h3>
             <p>{dictionary.trade.styleDescription}</p>
-            <span className="supply-card__action">{dictionary.trade.browseCatalog} →</span>
+            <span className="supply-card__action">
+              <span>{dictionary.trade.browseCatalog}</span>
+              <span className="directional-arrow" aria-hidden="true">
+                →
+              </span>
+            </span>
           </Link>
         </div>
       </section>
@@ -91,7 +101,10 @@ export default async function LocaleHomePage({ params }: LocaleHomePageProps) {
           <div>
             <p>{dictionary.trade.responseNote}</p>
             <Link className="text-link" href={`/${locale}/contact`}>
-              {dictionary.navigation.contact} →
+              <span>{dictionary.navigation.contact}</span>
+              <span className="directional-arrow" aria-hidden="true">
+                →
+              </span>
             </Link>
           </div>
         </div>

@@ -43,17 +43,35 @@ test("mobile navigation is operable by keyboard and keeps inquiry entry visible"
   await expect(menuButton).toHaveCSS("outline-style", "solid")
   await menuButton.press("Enter")
 
+  const navigation = page.getByRole("navigation", { name: "Main navigation" })
   await expect(
     page.getByRole("button", { name: "Close navigation" }),
   ).toHaveAttribute("aria-expanded", "true")
-  await expect(page.getByRole("navigation", { name: "Main navigation" })).toBeVisible()
+  await expect(navigation).toBeVisible()
+  await expect(navigation.getByRole("link").first()).toBeFocused()
   await expect(
-    page.getByRole("navigation", { name: "Main navigation" }).getByRole("link", {
+    navigation.getByRole("link", {
       name: "Stock lots",
       exact: true,
     }),
   ).toBeVisible()
   await expect(inquiryEntry).toBeVisible()
+
+  await page.keyboard.press("Escape")
+  await expect(navigation).toBeHidden()
+  await expect(menuButton).toBeFocused()
+})
+
+test("skip link moves keyboard focus to the public main content", async ({
+  page,
+}) => {
+  await page.goto("/en")
+
+  const skipLink = page.getByRole("link", { name: "Skip to content" })
+  await skipLink.focus()
+  await skipLink.press("Enter")
+
+  await expect(page.locator("#main-content")).toBeFocused()
 })
 
 test("unsupported locale segments render a bilingual 404", async ({ page }) => {
