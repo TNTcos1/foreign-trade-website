@@ -20,7 +20,7 @@
   --color-focus: #90402e;
   --color-status-ready: #1f7055;
   --color-status-ready-bg: #dcece5;
-  --color-status-booking: #9b5a24;
+  --color-status-booking: #904718;
   --color-status-booking-bg: #f3e3cf;
   --color-status-sold: #7b3a36;
   --color-status-sold-bg: #efdcda;
@@ -730,6 +730,10 @@ button {
   max-width: 52rem;
   padding-block: 3rem;
   color: var(--color-warm-white);
+}
+
+.not-found-page .eyebrow {
+  color: var(--color-terracotta-light);
 }
 
 .not-found-page h1 {
