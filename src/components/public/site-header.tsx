@@ -44,7 +44,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
     [dictionary.navigation.catalog, `/${locale}/catalog`],
     [dictionary.navigation.stockLots, `/${locale}/stock-lots`],
     [dictionary.navigation.singleStyles, `/${locale}/single-styles`],
-    [dictionary.navigation.trustCenter, `/${locale}/trust`],
+    [dictionary.navigation.trustCenter, `/${locale}/why-us`],
     [dictionary.navigation.howToBuy, `/${locale}/how-to-buy`],
     [dictionary.navigation.contact, `/${locale}/contact`],
   ] as const

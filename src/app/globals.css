@@ -654,6 +654,116 @@ button {
   font-weight: 800;
 }
 
+.content-hero h1 {
+  max-width: 15ch;
+}
+
+.content-ledger {
+  padding-block: 4.5rem;
+}
+
+.content-sections {
+  border-block-start: 1px solid var(--color-border-strong);
+}
+
+.content-section {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-block: 2rem;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.content-section__index {
+  color: var(--color-terracotta-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.content-section h2 {
+  max-width: 22ch;
+  color: var(--color-green-950);
+  font-size: clamp(1.8rem, 6vw, 3.25rem);
+}
+
+.content-section p {
+  max-width: 52rem;
+  color: var(--color-muted);
+  font-size: 1.02rem;
+}
+
+.content-faq {
+  display: grid;
+  gap: 1rem;
+  margin-block: 1.5rem 0;
+}
+
+.content-faq > div {
+  padding: 1.25rem;
+  background: var(--color-sand-100);
+  border-inline-start: 0.25rem solid var(--color-terracotta);
+}
+
+.content-faq dt {
+  margin-block-end: 0.45rem;
+  color: var(--color-green-950);
+  font-weight: 800;
+}
+
+.content-faq dd {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.content-markets {
+  padding-block: 4.5rem;
+  background: var(--color-sand-100);
+  border-block: 1px solid var(--color-border);
+}
+
+.content-markets__heading .eyebrow,
+.market-products__heading .eyebrow {
+  max-width: 46rem;
+}
+
+.market-link-grid {
+  display: grid;
+  border-block-start: 1px solid var(--color-border-strong);
+}
+
+.market-link-grid a {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding-block: 1.35rem;
+  border-block-end: 1px solid var(--color-border);
+}
+
+.market-link-grid a:hover {
+  color: var(--color-terracotta-dark);
+}
+
+.market-link-grid a > span:first-child {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.content-privacy-link {
+  margin-inline-start: 1rem;
+}
+
+.market-products {
+  padding-block: 5rem;
+}
+
+.market-inquiry-link {
+  margin-block-end: 1rem;
+  margin-inline-end: 1rem;
+}
+
 .site-footer {
   padding-block-start: 4rem;
   background: var(--color-green-950);
@@ -879,6 +989,30 @@ button {
     border-block-start: 0;
     border-inline-start: 1px solid rgb(255 255 255 / 55%);
     padding-inline-start: 2.5rem;
+  }
+
+  .content-ledger {
+    padding-block: 6.5rem;
+  }
+
+  .content-section {
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 2.5rem;
+    padding-block: 3rem;
+  }
+
+  .content-faq {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .market-link-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-inline-start: 1px solid var(--color-border-strong);
+  }
+
+  .market-link-grid a {
+    padding: 1.5rem;
+    border-inline-end: 1px solid var(--color-border-strong);
   }
 
   .site-footer__grid {
