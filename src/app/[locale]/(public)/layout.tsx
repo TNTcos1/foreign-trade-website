@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import type { ReactNode } from "react"
 
+import { InquiryListProvider } from "@/components/inquiries/inquiry-list-provider"
 import { SiteFooter } from "@/components/public/site-footer"
 import { SiteHeader } from "@/components/public/site-header"
 import { isSupportedLocale } from "@/modules/localization/config"
@@ -21,10 +22,12 @@ export default async function PublicLayout({
   }
 
   return (
-    <div className="site-frame">
-      <SiteHeader locale={locale} />
-      {children}
-      <SiteFooter locale={locale} />
-    </div>
+    <InquiryListProvider locale={locale}>
+      <div className="site-frame">
+        <SiteHeader locale={locale} />
+        {children}
+        <SiteFooter locale={locale} />
+      </div>
+    </InquiryListProvider>
   )
 }

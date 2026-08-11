@@ -2,6 +2,7 @@
 import type { ProductStatus } from "@prisma/client"
 import Link from "next/link"
 
+import { AddToInquiryButton } from "@/components/inquiries/add-to-inquiry-button"
 import { StatusBadge, type PublicProductStatus } from "@/components/ui/status-badge"
 import { getPublicMediaUrl } from "@/lib/site-url"
 import type { PublicProductCard } from "@/modules/catalog/queries"
@@ -158,10 +159,21 @@ export function ProductCard({ product, locale, dictionary }: ProductCardProps) {
               </span>
             ) : null}
           </div>
-          <Link className="product-card__detail-link" href={detailHref}>
-            <span>{dictionary.catalog.viewDetails}</span>
-            <span className="directional-arrow" aria-hidden="true">→</span>
-          </Link>
+          <div className="product-card__actions">
+            {product.canAddToInquiry ? (
+              <AddToInquiryButton
+                productId={product.id}
+                code={product.code}
+                locale={locale}
+                placement="product_card"
+                className="button button--primary product-card__inquiry-button"
+              />
+            ) : null}
+            <Link className="product-card__detail-link" href={detailHref}>
+              <span>{dictionary.catalog.viewDetails}</span>
+              <span className="directional-arrow" aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
       </div>
     </article>

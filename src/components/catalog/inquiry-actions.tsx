@@ -1,5 +1,6 @@
-import Link from "next/link"
-
+import { AddToInquiryButton } from "@/components/inquiries/add-to-inquiry-button"
+import { TrackedWhatsAppLink } from "@/components/inquiries/tracked-whatsapp-link"
+import { createWhatsAppUrl } from "@/lib/whatsapp"
 import type { PublicProduct } from "@/modules/catalog/queries"
 import type { SupportedLocale } from "@/modules/localization/config"
 import type { Dictionary } from "@/modules/localization/dictionary"
@@ -31,7 +32,7 @@ type InquiryActionsProps = {
 
 export function InquiryActions({ product, locale, dictionary }: InquiryActionsProps) {
   const referencePrice = formatReferencePrice(product, locale)
-  const productCode = encodeURIComponent(product.code)
+  const whatsappUrl = createWhatsAppUrl(dictionary.product.whatsappProductMessage(product.code))
 
   return (
     <aside className="inquiry-actions" aria-label={dictionary.product.purchaseTerms}>
@@ -49,18 +50,26 @@ export function InquiryActions({ product, locale, dictionary }: InquiryActionsPr
 
       {product.canAddToInquiry ? (
         <div className="inquiry-actions__buttons">
-          <Link
-            className="button button--primary"
-            href={`/${locale}/inquiry?product=${productCode}`}
-          >
-            {dictionary.inquiry.add}
-          </Link>
-          <Link
-            className="button button--secondary"
-            href={`/${locale}/contact?product=${productCode}&channel=whatsapp`}
-          >
-            {dictionary.product.askWhatsapp}
-          </Link>
+          <AddToInquiryButton
+            productId={product.id}
+            code={product.code}
+            locale={locale}
+            placement="product_detail"
+          />
+          {whatsappUrl ? (
+            <TrackedWhatsAppLink
+              className="button button--secondary"
+              href={whatsappUrl}
+              locale={locale}
+              placement="product_detail"
+            >
+              {dictionary.product.askWhatsapp}
+            </TrackedWhatsAppLink>
+          ) : (
+            <p className="inquiry-actions__whatsapp-unavailable">
+              {dictionary.product.whatsappUnavailable}
+            </p>
+          )}
         </div>
       ) : (
         <p className="inquiry-actions__unavailable">{dictionary.product.unavailable}</p>

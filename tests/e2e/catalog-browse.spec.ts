@@ -97,7 +97,7 @@ test("ready-stock detail leads with media proof and inquiry action", async ({
     ),
   ).toBe(true)
   await expect(
-    page.getByRole("link", { name: "Add to inquiry list" }),
+    page.getByRole("button", { name: "Add to inquiry list" }),
   ).toBeVisible()
   await expect(
     page.getByRole("link", { name: "Ask on WhatsApp" }),
@@ -128,7 +128,7 @@ test("sold-out detail stays public without an inquiry action", async ({ page }) 
     page.getByText("This stock is unavailable for inquiry."),
   ).toBeVisible()
   await expect(
-    page.getByRole("link", { name: "Add to inquiry list" }),
+    page.getByRole("button", { name: "Add to inquiry list" }),
   ).toHaveCount(0)
   await expect(
     page.getByRole("heading", { level: 2, name: "Related current stock" }),

@@ -20,6 +20,7 @@ export type InquiryItemSnapshot = {
   } | null
   availableQuantity: number | null
   lastVerifiedAt: string | null
+  requestedNote: string | null
 }
 
 export function isEffectiveInquiry(input: InquiryValidityInput): boolean {

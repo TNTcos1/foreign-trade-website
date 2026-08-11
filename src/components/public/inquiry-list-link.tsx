@@ -1,17 +1,17 @@
+"use client"
+
 import Link from "next/link"
 
+import { useInquiryList } from "@/components/inquiries/inquiry-list-provider"
 import type { SupportedLocale } from "@/modules/localization/config"
 import { getDictionary } from "@/modules/localization/dictionary"
 
 type InquiryListLinkProps = {
   locale: SupportedLocale
-  count?: number
 }
 
-export function InquiryListLink({
-  locale,
-  count = 0,
-}: InquiryListLinkProps) {
+export function InquiryListLink({ locale }: InquiryListLinkProps) {
+  const { count } = useInquiryList()
   const dictionary = getDictionary(locale)
 
   return (
