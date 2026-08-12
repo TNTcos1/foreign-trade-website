@@ -9,6 +9,10 @@ import {
   type CatalogProductRow,
   type PublicProductRow,
 } from "@/modules/catalog/repository"
+import {
+  projectPublicMediaMetadata,
+  type PublicMediaMetadata,
+} from "@/modules/media/metadata"
 
 export type SerializableJson = null | boolean | number | string | SerializableJson[] | { [key: string]: SerializableJson }
 
@@ -17,7 +21,7 @@ export type PublicProductMedia = {
   mediaType: string
   url: string
   alt: string | null
-  metadata: SerializableJson | null
+  metadata: PublicMediaMetadata | null
   sortOrder: number
   isPrimary: boolean
   createdAt: string
@@ -252,7 +256,7 @@ function mapPublicProduct(
       mediaType: media.mediaType,
       url: media.url,
       alt: translation.shareImageAlt ?? media.altText,
-      metadata: toSerializableJson(media.metadata),
+      metadata: projectPublicMediaMetadata(media.metadata),
       sortOrder: media.sortOrder,
       isPrimary: media.isPrimary,
       createdAt: media.createdAt.toISOString(),
