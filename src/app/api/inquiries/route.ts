@@ -15,6 +15,34 @@ import { validateInquiryForm } from "@/modules/inquiries/validation"
 
 const MAX_REQUEST_BYTES = 32 * 1_024
 
+async function readLimitedBody(request: NextRequest): Promise<string | null> {
+  if (!request.body) {
+    return ""
+  }
+
+  const reader = request.body.getReader()
+  const decoder = new TextDecoder()
+  let byteLength = 0
+  let body = ""
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        return body + decoder.decode()
+      }
+      byteLength += value.byteLength
+      if (byteLength > MAX_REQUEST_BYTES) {
+        await reader.cancel()
+        return null
+      }
+      body += decoder.decode(value, { stream: true })
+    }
+  } finally {
+    reader.releaseLock()
+  }
+}
+
 function jsonError(
   code: string,
   status: number,
@@ -40,8 +68,8 @@ export async function POST(request: NextRequest) {
     return jsonError("INVALID_ORIGIN", 403)
   }
 
-  const contentType = request.headers.get("content-type")?.toLowerCase() ?? ""
-  if (!contentType.startsWith("application/json")) {
+  const contentType = request.headers.get("content-type")?.split(";", 1)[0]?.trim().toLowerCase()
+  if (contentType !== "application/json") {
     return jsonError("UNSUPPORTED_MEDIA_TYPE", 415)
   }
 
@@ -64,8 +92,8 @@ export async function POST(request: NextRequest) {
 
   let body: unknown
   try {
-    const rawBody = await request.text()
-    if (Buffer.byteLength(rawBody, "utf8") > MAX_REQUEST_BYTES) {
+    const rawBody = await readLimitedBody(request)
+    if (rawBody === null) {
       return jsonError("REQUEST_TOO_LARGE", 413)
     }
     body = JSON.parse(rawBody) as unknown

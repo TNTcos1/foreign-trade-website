@@ -11,9 +11,12 @@ import {
 import type { NormalizedInquiryInput } from "@/modules/inquiries/validation"
 
 const createdInquiryIds = new Set<string>()
+const draftTranslationProductCode = `TEST-INQUIRY-DRAFT-${Date.now()}`
+const publishedAt = new Date("2026-01-01T00:00:00.000Z")
 let readyProductId = ""
 let bookingProductId = ""
 let soldOutProductId = ""
+let draftTranslationProductId = ""
 
 function createInput(overrides: Partial<NormalizedInquiryInput> = {}): NormalizedInquiryInput {
   return {
@@ -64,6 +67,37 @@ beforeAll(async () => {
   readyProductId = products.find(({ code }) => code === "DEV-STOCK-READY-001")?.id ?? ""
   bookingProductId = products.find(({ code }) => code === "DEV-STYLE-BOOKING-001")?.id ?? ""
   soldOutProductId = products.find(({ code }) => code === "DEV-STOCK-SOLD-001")?.id ?? ""
+  const draftTranslationProduct = await prisma.product.create({
+    data: {
+      code: draftTranslationProductCode,
+      type: "STOCK_LOT",
+      status: "READY_STOCK",
+      category: "Test category",
+      purchaseUnit: "lot",
+      publishedAt,
+      translations: {
+        create: [
+          {
+            locale: "en",
+            title: "Published inquiry product",
+            summary: "Published English summary",
+            description: "Published English description",
+            publishedAt,
+          },
+          {
+            locale: "ar",
+            title: "مسودة خاصة للاستفسار",
+            summary: "ملخص عربي خاص",
+            description: "وصف عربي خاص",
+            publishedAt: null,
+          },
+        ],
+      },
+    },
+    select: { id: true },
+  })
+  draftTranslationProductId = draftTranslationProduct.id
+
   expect(readyProductId).not.toBe("")
   expect(bookingProductId).not.toBe("")
   expect(soldOutProductId).not.toBe("")
@@ -85,6 +119,7 @@ afterAll(async () => {
       },
     },
   })
+  await prisma.product.deleteMany({ where: { code: draftTranslationProductCode } })
   await prisma.$disconnect()
 })
 
@@ -183,6 +218,30 @@ describe("inquiry submission transaction", () => {
 
     await expect(submitInquiry(input)).rejects.toEqual(
       new InquiryProductsUnavailableError([soldOutProductId]),
+    )
+    await expect(prisma.inquiry.findUnique({
+      where: { deduplicationKey: hashInquiryDeduplicationKey(input.idempotencyKey) },
+    })).resolves.toBeNull()
+  })
+
+  it("rejects a product whose requested translation is still a draft", async () => {
+    const input = createInput({
+      locale: "ar",
+      items: [
+        {
+          productId: draftTranslationProductId,
+          requestedQuantity: 1_000,
+          note: null,
+        },
+      ],
+    })
+
+    const submission = submitInquiry(input).then((result) => {
+      createdInquiryIds.add(result.inquiryId)
+      return result
+    })
+    await expect(submission).rejects.toEqual(
+      new InquiryProductsUnavailableError([draftTranslationProductId]),
     )
     await expect(prisma.inquiry.findUnique({
       where: { deduplicationKey: hashInquiryDeduplicationKey(input.idempotencyKey) },

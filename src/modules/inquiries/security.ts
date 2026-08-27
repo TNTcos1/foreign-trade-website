@@ -127,5 +127,8 @@ export function getInquirySecret(): string {
   if (!secret) {
     throw new Error("AUTH_SECRET is required for inquiry security")
   }
+  if (secret.length < 32) {
+    throw new Error("AUTH_SECRET must be at least 32 characters")
+  }
   return secret
 }

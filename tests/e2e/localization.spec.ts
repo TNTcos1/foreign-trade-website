@@ -44,12 +44,12 @@ test("server-renders English and Arabic document language and direction", async 
 test("locale switching preserves the current path and source query parameters", async ({
   page,
 }) => {
-  await page.goto("/en/trust?utm_source=expo&utm_medium=qr")
+  await page.goto("/en/why-us?utm_source=expo&utm_medium=qr")
 
   await page.getByRole("link", { name: /العربية/ }).click()
 
   await expect(page).toHaveURL(
-    /\/ar\/trust\?utm_source=expo&utm_medium=qr$/,
+    /\/ar\/why-us\?utm_source=expo&utm_medium=qr$/,
   )
   await expect(page.locator("html")).toHaveAttribute("lang", "ar")
 })

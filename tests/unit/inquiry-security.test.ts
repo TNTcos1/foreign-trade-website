@@ -7,6 +7,7 @@ import { createWhatsAppUrl } from "@/lib/whatsapp"
 import {
   createFormToken,
   createInquiryReceipt,
+  getInquirySecret,
   verifyFormToken,
   verifyInquiryReceipt,
 } from "@/modules/inquiries/security"
@@ -52,6 +53,24 @@ describe("inquiry security", () => {
 
     clock += 60_001
     expect(limiter.check(key)).toMatchObject({ allowed: true, remaining: 1 })
+  })
+
+  it("rejects missing or weak inquiry secrets", () => {
+    const original = process.env.AUTH_SECRET
+    try {
+      delete process.env.AUTH_SECRET
+      expect(() => getInquirySecret()).toThrow("AUTH_SECRET")
+      process.env.AUTH_SECRET = "too-short"
+      expect(() => getInquirySecret()).toThrow("at least 32 characters")
+      process.env.AUTH_SECRET = secret
+      expect(getInquirySecret()).toBe(secret)
+    } finally {
+      if (original === undefined) {
+        delete process.env.AUTH_SECRET
+      } else {
+        process.env.AUTH_SECRET = original
+      }
+    }
   })
 
   it("requires explicit safe WhatsApp configuration", () => {

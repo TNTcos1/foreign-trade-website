@@ -62,6 +62,7 @@ export type InquirySubmissionPayload = {
 
 export type NormalizedSourceContext = {
   sessionId: string
+  locale?: SupportedLocale | null
   channel: string
   campaign: string | null
   source: string | null
@@ -303,6 +304,9 @@ export function validateInquiryForm(input: unknown): InquiryValidationResult {
       items,
       source: {
         sessionId,
+        ...(isSupportedLocale(sourceCandidate.locale as string)
+          ? { locale: sourceCandidate.locale as SupportedLocale }
+          : {}),
         channel: optionalSourceValue(sourceCandidate.channel, 64) ?? "direct",
         campaign: optionalSourceValue(sourceCandidate.campaign, 120),
         source: optionalSourceValue(sourceCandidate.source, 120),

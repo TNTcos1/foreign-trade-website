@@ -8,6 +8,7 @@ import {
   localizePath,
   type SupportedLocale,
 } from "@/modules/localization/config"
+import { trackPublicEvent } from "@/modules/analytics/events"
 import { getDictionary } from "@/modules/localization/dictionary"
 
 type LocaleSwitcherProps = {
@@ -28,6 +29,11 @@ function LocaleSwitcherLink({ locale }: LocaleSwitcherProps) {
       href={localizePath(nextLocale, currentAddress)}
       lang={nextLocale}
       aria-label={`${dictionary.accessibility.changeLanguage}: ${dictionary.locale.switchLabel}`}
+      onClick={() => trackPublicEvent({
+        name: "locale_changed",
+        locale,
+        placement: "locale_switcher",
+      })}
     >
       <span aria-hidden="true">{locale === "en" ? "ع" : "EN"}</span>
       <span>{dictionary.locale.switchLabel}</span>

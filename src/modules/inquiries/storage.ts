@@ -37,6 +37,7 @@ export interface InquiryListStorage {
 
 export type InquirySourceContext = {
   sessionId: string
+  locale?: SupportedLocale | null
   channel: string
   campaign: string | null
   source: string | null
@@ -289,8 +290,13 @@ function sanitizeSourceContext(value: unknown): InquirySourceContext | null {
     return normalized || null
   }
 
+  const locale = typeof candidate.locale === "string" && isSupportedLocale(candidate.locale)
+    ? candidate.locale
+    : null
+
   return {
     sessionId,
+    ...(locale ? { locale } : {}),
     channel,
     campaign: optional(candidate.campaign, 120),
     source: optional(candidate.source, 120),

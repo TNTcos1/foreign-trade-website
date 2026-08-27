@@ -12,6 +12,8 @@ import { createProductJsonLd, getPublicProductByCode } from "@/modules/catalog/q
 import { isSupportedLocale } from "@/modules/localization/config"
 import { getDictionary } from "@/modules/localization/dictionary"
 
+export const dynamic = "force-dynamic"
+
 type ProductPageProps = {
   params: Promise<{ locale: string; code: string }>
 }

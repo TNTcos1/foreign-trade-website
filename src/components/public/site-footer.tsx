@@ -31,6 +31,9 @@ export function SiteFooter({ locale }: SiteFooterProps) {
           <Link href={`/${locale}/catalog`}>
             {dictionary.navigation.catalog}
           </Link>
+          <Link href={`/${locale}/why-us`}>
+            {dictionary.navigation.trustCenter}
+          </Link>
           <Link href={`/${locale}/how-to-buy`}>
             {dictionary.navigation.howToBuy}
           </Link>

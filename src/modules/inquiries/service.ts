@@ -196,7 +196,13 @@ async function createInquiryTransaction(
             publishedAt: true,
             archivedAt: true,
             translations: {
-              where: { locale: input.locale },
+              where: {
+                locale: input.locale,
+                AND: [
+                  { publishedAt: { not: null } },
+                  { publishedAt: { lte: now } },
+                ],
+              },
               select: { title: true },
               take: 1,
             },
