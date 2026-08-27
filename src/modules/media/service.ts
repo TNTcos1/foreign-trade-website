@@ -15,6 +15,14 @@ import {
 const PRESIGNED_UPLOAD_TTL_SECONDS = 5 * 60
 const stagingKeyPattern = /^staging\/media\/([0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})$/
 
+type MediaVariant = {
+  key: string
+  contentType: "image/webp"
+  bytes: number
+  width: number
+  height: number
+}
+
 export type MediaMetadataV1 = {
   version: 1
   original: {
@@ -27,14 +35,12 @@ export type MediaMetadataV1 = {
   }
   variants: Record<
     "primary" | "card" | "thumbnail" | "social-share",
-    {
-      key: string
-      contentType: "image/webp"
-      bytes: number
-      width: number
-      height: number
-    }
+    MediaVariant
   >
+}
+
+export type PublishedMediaMetadataV1 = Omit<MediaMetadataV1, "variants"> & {
+  variants: Record<keyof MediaMetadataV1["variants"], MediaVariant & { url: string }>
 }
 
 export class MediaServiceError extends Error {
@@ -165,6 +171,67 @@ export async function completeUploadedImage(input: {
       throw error
     }
     throw new MediaServiceError("PROCESSING_FAILED")
+  }
+}
+
+export async function publishCompletedImage(input: {
+  metadata: MediaMetadataV1
+  storage: ObjectStorage
+}): Promise<{
+  primaryUrl: string
+  metadata: PublishedMediaMetadataV1
+  cleanup: () => Promise<void>
+}> {
+  const identifier = stagingIdentifier(input.metadata.original.key)
+  const publishedKeys: string[] = []
+  const variants = {} as PublishedMediaMetadataV1["variants"]
+
+  try {
+    for (const [name, variant] of Object.entries(input.metadata.variants)) {
+      if (!variant.key.startsWith(`staging/media/${identifier}/`)) {
+        throw new MediaServiceError("INVALID_STAGING_KEY")
+      }
+      const object = await input.storage.getObject(variant.key, variant.bytes)
+      if (
+        object.contentLength !== variant.bytes ||
+        object.contentType !== variant.contentType
+      ) {
+        throw new MediaServiceError("CONTENT_MISMATCH")
+      }
+      const publicKey = `public/media/${identifier}/${name}.webp`
+      publishedKeys.push(publicKey)
+      await input.storage.putObject({ key: publicKey, ...object })
+      variants[name as keyof MediaMetadataV1["variants"]] = {
+        ...variant,
+        key: publicKey,
+        url: input.storage.getPublicUrl(publicKey),
+      }
+    }
+  } catch (error) {
+    await Promise.allSettled(
+      publishedKeys.map((key) => input.storage.deleteObject(key)),
+    )
+    if (error instanceof MediaServiceError) {
+      throw error
+    }
+    throw new MediaServiceError("PROCESSING_FAILED")
+  }
+
+  if (!variants.primary) {
+    await Promise.allSettled(
+      publishedKeys.map((key) => input.storage.deleteObject(key)),
+    )
+    throw new MediaServiceError("PROCESSING_FAILED")
+  }
+  const cleanup = async () => {
+    await Promise.allSettled(
+      publishedKeys.map((key) => input.storage.deleteObject(key)),
+    )
+  }
+  return {
+    primaryUrl: variants.primary.url,
+    metadata: { ...input.metadata, variants },
+    cleanup,
   }
 }
 

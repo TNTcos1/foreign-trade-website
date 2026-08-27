@@ -31,7 +31,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: {
         code: true,
         updatedAt: true,
-        translations: { select: { locale: true } },
+        translations: {
+          where: {
+            AND: [
+              { publishedAt: { not: null } },
+              { publishedAt: { lte: now } },
+            ],
+          },
+          select: { locale: true },
+        },
       },
       orderBy: { code: "asc" },
     }),
@@ -51,7 +59,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: {
         slug: true,
         updatedAt: true,
-        translations: { select: { locale: true } },
+        translations: {
+          where: {
+            AND: [
+              { publishedAt: { not: null } },
+              { publishedAt: { lte: now } },
+            ],
+          },
+          select: { locale: true },
+        },
       },
       orderBy: { slug: "asc" },
     }),

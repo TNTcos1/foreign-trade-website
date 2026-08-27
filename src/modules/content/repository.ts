@@ -3,6 +3,32 @@ import type { Locale, Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 import { publicProductStatuses } from "@/modules/catalog/repository"
 
+function publishedProductTranslationWhere(
+  locale: Locale,
+  now: Date,
+): Prisma.ProductTranslationWhereInput {
+  return {
+    locale,
+    AND: [
+      { publishedAt: { not: null } },
+      { publishedAt: { lte: now } },
+    ],
+  }
+}
+
+function publishedContentTranslationWhere(
+  locale: Locale | undefined,
+  now: Date,
+): Prisma.ContentTranslationWhereInput {
+  return {
+    ...(locale ? { locale } : {}),
+    AND: [
+      { publishedAt: { not: null } },
+      { publishedAt: { lte: now } },
+    ],
+  }
+}
+
 function contentVisibilityWhere(
   slug: string,
   locale: Locale,
@@ -14,17 +40,18 @@ function contentVisibilityWhere(
       { publishedAt: { not: null } },
       { publishedAt: { lte: now } },
     ],
-    translations: { some: { locale } },
+    translations: { some: publishedContentTranslationWhere(locale, now) },
   }
 }
 
-const localizedContentSelect = () => ({
+const localizedContentSelect = (now: Date) => ({
   id: true,
   slug: true,
   pageType: true,
   publishedAt: true,
   updatedAt: true,
   translations: {
+    where: publishedContentTranslationWhere(undefined, now),
     orderBy: { locale: "asc" as const },
     select: {
       locale: true,
@@ -44,7 +71,7 @@ export async function findPublicContentPageRow(
 ) {
   return prisma.contentPage.findFirst({
     where: contentVisibilityWhere(slug, locale, now),
-    select: localizedContentSelect(),
+    select: localizedContentSelect(now),
   })
 }
 
@@ -52,7 +79,7 @@ export type PublicContentPageRow = NonNullable<
   Awaited<ReturnType<typeof findPublicContentPageRow>>
 >
 
-const marketProductSelect = (locale: Locale) => ({
+const marketProductSelect = (locale: Locale, now: Date) => ({
   id: true,
   code: true,
   type: true,
@@ -68,7 +95,7 @@ const marketProductSelect = (locale: Locale) => ({
   lastVerifiedAt: true,
   publishedAt: true,
   translations: {
-    where: { locale },
+    where: publishedProductTranslationWhere(locale, now),
     take: 1,
     select: {
       title: true,
@@ -118,7 +145,7 @@ export async function findPublicMarketPageRow(
       marketCode: true,
       sourceTag: true,
       contentPage: {
-        select: localizedContentSelect(),
+        select: localizedContentSelect(now),
       },
       products: {
         where: {
@@ -129,13 +156,13 @@ export async function findPublicMarketPageRow(
               { publishedAt: { not: null } },
               { publishedAt: { lte: now } },
             ],
-            translations: { some: { locale } },
+            translations: { some: publishedProductTranslationWhere(locale, now) },
           },
         },
         orderBy: [{ sortOrder: "asc" }, { product: { code: "asc" } }],
         select: {
           product: {
-            select: marketProductSelect(locale),
+            select: marketProductSelect(locale, now),
           },
         },
       },

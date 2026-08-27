@@ -32,6 +32,13 @@ enum UserRole {
   SALES
 }
 
+enum AdminUserAuditAction {
+  ROLE_CHANGED
+  ACTIVATED
+  DEACTIVATED
+  PASSWORD_RESET
+}
+
 enum LeadStatus {
   NEW
   CONTACTED
@@ -66,6 +73,7 @@ model Product {
   availableQuantity    Int?
   lastVerifiedAt       DateTime?
   publishedAt          DateTime?
+  draftData            Json?
   archivedAt           DateTime?
   createdById          String?              @db.Uuid
   updatedById          String?              @db.Uuid
@@ -88,8 +96,8 @@ model Product {
 }
 
 model ProductTranslation {
-  id             String   @id @default(uuid()) @db.Uuid
-  productId      String   @db.Uuid
+  id             String    @id @default(uuid()) @db.Uuid
+  productId      String    @db.Uuid
   locale         Locale
   title          String
   summary        String
@@ -97,11 +105,14 @@ model ProductTranslation {
   seoTitle       String?
   seoDescription String?
   shareImageAlt  String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  publishedAt    DateTime?
+  draftData      Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  product        Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId, locale])
+  @@index([productId, locale, publishedAt])
 }
 
 model ProductMedia {
@@ -262,11 +273,14 @@ model ContentTranslation {
   body           String
   seoTitle       String?
   seoDescription String?
+  publishedAt    DateTime?
+  draftData      Json?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   contentPage    ContentPage @relation(fields: [contentPageId], references: [id], onDelete: Cascade)
 
   @@unique([contentPageId, locale])
+  @@index([contentPageId, locale, publishedAt])
 }
 
 model MarketPage {
@@ -300,6 +314,7 @@ model AdminUser {
   passwordHash        String
   role                UserRole
   active              Boolean          @default(true)
+  authVersion         Int              @default(0)
   developmentOnly     Boolean          @default(false)
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
@@ -311,6 +326,38 @@ model AdminUser {
   assignmentsMade     LeadAssignment[] @relation("AssignmentsMade")
   createdContentPages ContentPage[]    @relation("ContentPagesCreated")
   updatedContentPages ContentPage[]    @relation("ContentPagesUpdated")
+  sessions            AdminSession[]
+  auditEventsAuthored  AdminUserAuditEvent[] @relation("AdminUserAuditActor")
+  auditEventsTargeted  AdminUserAuditEvent[] @relation("AdminUserAuditTarget")
+}
+
+model AdminUserAuditEvent {
+  id           String               @id @default(uuid()) @db.Uuid
+  actorId      String               @db.Uuid
+  targetUserId String               @db.Uuid
+  action       AdminUserAuditAction
+  metadata     Json?
+  createdAt    DateTime             @default(now())
+  actor        AdminUser            @relation("AdminUserAuditActor", fields: [actorId], references: [id], onDelete: Restrict)
+  targetUser   AdminUser            @relation("AdminUserAuditTarget", fields: [targetUserId], references: [id], onDelete: Restrict)
+
+  @@index([actorId, createdAt])
+  @@index([targetUserId, createdAt])
+}
+
+model AdminSession {
+  id          String    @id @default(uuid()) @db.Uuid
+  tokenHash   String    @unique
+  adminUserId String    @db.Uuid
+  authVersion Int       @default(0)
+  expiresAt   DateTime
+  revokedAt   DateTime?
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, revokedAt])
+  @@index([expiresAt])
 }
 
 model TermTranslation {

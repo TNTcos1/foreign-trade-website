@@ -77,6 +77,11 @@ const globalForRateLimit = globalThis as unknown as {
 export const inquiryRateLimiter = globalForRateLimit.inquiryRateLimiter ??
   createMemoryRateLimiter({ limit: 5, windowMs: 15 * 60 * 1_000 })
 
+export const adminLoginRateLimiter = createMemoryRateLimiter({
+  limit: 5,
+  windowMs: 15 * 60 * 1_000,
+})
+
 if (process.env.NODE_ENV !== "production") {
   globalForRateLimit.inquiryRateLimiter = inquiryRateLimiter
 }

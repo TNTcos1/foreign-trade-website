@@ -79,12 +79,22 @@ beforeAll(async () => {
         purchaseUnit: "piece",
         publishedAt,
         translations: {
-          create: {
-            locale: "en",
-            title: "English-only test product",
-            summary: "Visible only in English",
-            description: "Visible only in English",
-          },
+          create: [
+            {
+              locale: "en",
+              title: "English-only test product",
+              summary: "Visible only in English",
+              description: "Visible only in English",
+              publishedAt,
+            },
+            {
+              locale: "ar",
+              title: "مسودة عربية خاصة",
+              summary: "يجب ألا تظهر للعامة",
+              description: "يجب ألا تظهر للعامة",
+              publishedAt: null,
+            },
+          ],
         },
       },
     }),

@@ -31,6 +31,7 @@ export interface ObjectStorage {
   getObject(key: string, maxBytes: number): Promise<StoredObject>
   putObject(input: StoredObject & { key: string }): Promise<void>
   deleteObject(key: string): Promise<void>
+  getPublicUrl(key: string): string
 }
 
 type S3StorageConfig = {
@@ -39,6 +40,7 @@ type S3StorageConfig = {
   bucket: string
   accessKeyId: string
   secretAccessKey: string
+  publicUrl: string
 }
 
 export class StorageConfigurationError extends Error {
@@ -88,6 +90,11 @@ export function readS3StorageConfig(
     bucket: required(environment, "STORAGE_BUCKET"),
     accessKeyId: required(environment, "STORAGE_ACCESS_KEY_ID"),
     secretAccessKey: required(environment, "STORAGE_SECRET_ACCESS_KEY"),
+    publicUrl: parseStorageUrl(
+      required(environment, "STORAGE_PUBLIC_URL"),
+      "STORAGE_PUBLIC_URL",
+      production,
+    ),
   }
 }
 
@@ -216,6 +223,17 @@ export class S3ObjectStorage implements ObjectStorage {
       Key: key,
     }))
   }
+
+  getPublicUrl(key: string): string {
+    assertSafeKey(key)
+    if (!key.startsWith("public/media/")) {
+      throw new StorageConfigurationError("Only public media keys can have public URLs")
+    }
+    const base = this.config.publicUrl.endsWith("/")
+      ? this.config.publicUrl
+      : `${this.config.publicUrl}/`
+    return new URL(key.slice("public/media/".length), base).toString()
+  }
 }
 
 export class LocalObjectStorage implements ObjectStorage {
@@ -272,6 +290,13 @@ export class LocalObjectStorage implements ObjectStorage {
       rm(filePath, { force: true }),
       rm(`${filePath}.content-type`, { force: true }),
     ])
+  }
+
+  getPublicUrl(key: string): string {
+    assertSafeKey(key)
+    throw new StorageConfigurationError(
+      "Local storage does not expose public media URLs",
+    )
   }
 }
 

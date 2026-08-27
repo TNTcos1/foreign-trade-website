@@ -8,6 +8,18 @@
 
 **Tech Stack:** Next.js 15+、React 19+、TypeScript 5+、Tailwind CSS、PostgreSQL 18、Prisma、Zod、Vitest、Playwright、Docker Compose、S3 兼容对象存储、邮件通知服务、翻译服务、匿名访问分析。
 
+## 当前执行状态（2026-08-27）
+
+> 本文件保留原始实施步骤；当前完成状态以 `.superpowers/sdd/2026-07-31-clothing-clearance-website/progress.md` 和对应 `task-N-checkpoint.md` 为准，不要仅根据下方历史 checkbox 判断进度。
+
+- Task 1–4：完成并已提交。
+- Task 5：实现与安全加固已提交；缺少真实测试配置，因此完整 inquiry Playwright/手动提交验收仍暂缓。
+- Task 6：完成并提交于 `8384636`。
+- Task 7：完成并提交于 `f2b3364`。
+- **Task 8：实现与技术验收完成。** 数据库 session、RBAC、locale publication、已发布草稿快照隔离、受保护商品/content/media/translation API、后台 UI、ADMIN 员工管理、浏览器 E2E、全量验证与数据库恢复均已完成；admin auth/editor Playwright 11/11、unit 148/148、integration 70/70。
+- Task 9–11：尚未开始；下一阶段从 Task 9 的 lead pipeline、assignment、notifications 与 export 开始。
+- 交付状态：Task 8 变更由 `implementation/clearance-site` 分支交付；完整证据见 `.superpowers/sdd/2026-07-31-clothing-clearance-website/task-8-checkpoint.md`。
+
 ## Global Constraints
 
 - 首发市场：中东、也门、印度、中南亚。

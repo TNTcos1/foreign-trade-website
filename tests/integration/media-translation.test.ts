@@ -6,6 +6,7 @@ import { describe, expect, it, vi } from "vitest"
 import {
   completeUploadedImage,
   createPresignedUpload,
+  publishCompletedImage,
 } from "@/modules/media/service"
 import type {
   ObjectStorage,
@@ -121,6 +122,22 @@ describe("media adapter integration", () => {
       "thumbnail",
       "social-share",
     ])
+    expect(storage.objects.size).toBe(5)
+
+    const published = await publishCompletedImage({
+      metadata: completed.metadata,
+      storage,
+    })
+    expect(published.primaryUrl).toMatch(
+      /^https:\/\/media\.example\.test\/public\/media\/[0-9a-f-]{36}\/primary\.webp$/,
+    )
+    expect(published.metadata.variants.card).toMatchObject({
+      key: expect.stringMatching(/^public\/media\/.+\/card\.webp$/),
+      url: expect.stringMatching(/^https:\/\/media\.example\.test\/public\/media\/.+\/card\.webp$/),
+    })
+    expect(storage.objects.size).toBe(9)
+
+    await published.cleanup()
     expect(storage.objects.size).toBe(5)
   })
 

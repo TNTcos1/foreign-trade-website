@@ -4,6 +4,19 @@ import { CATALOG_PAGE_SIZE, type CatalogFilters } from "@/modules/catalog/filter
 
 export const publicProductStatuses = ["READY_STOCK", "FACTORY_BOOKING", "SOLD_OUT"] as const satisfies readonly ProductStatus[]
 
+function publishedTranslationWhere(
+  locale: Locale | undefined,
+  now: Date,
+): Prisma.ProductTranslationWhereInput {
+  return {
+    ...(locale ? { locale } : {}),
+    AND: [
+      { publishedAt: { not: null } },
+      { publishedAt: { lte: now } },
+    ],
+  }
+}
+
 function publicVisibilityWhere(locale: Locale, now: Date): Prisma.ProductWhereInput {
   return {
     status: { in: [...publicProductStatuses] },
@@ -11,7 +24,7 @@ function publicVisibilityWhere(locale: Locale, now: Date): Prisma.ProductWhereIn
       { publishedAt: { not: null } },
       { publishedAt: { lte: now } },
     ],
-    translations: { some: { locale } },
+    translations: { some: publishedTranslationWhere(locale, now) },
   }
 }
 
@@ -108,7 +121,7 @@ export function buildCatalogOrderBy(sort: CatalogFilters["sort"]): Prisma.Produc
   }
 }
 
-function cardSelect(locale: Locale) {
+function cardSelect(locale: Locale, now: Date) {
   return {
     id: true,
     code: true,
@@ -125,7 +138,7 @@ function cardSelect(locale: Locale) {
     lastVerifiedAt: true,
     publishedAt: true,
     translations: {
-      where: { locale },
+      where: publishedTranslationWhere(locale, now),
       take: 1,
       select: {
         title: true,
@@ -170,7 +183,7 @@ export async function findPublicProductRows(filters: CatalogFilters, locale: Loc
       orderBy: buildCatalogOrderBy(filters.sort),
       skip: (filters.page - 1) * CATALOG_PAGE_SIZE,
       take: CATALOG_PAGE_SIZE,
-      select: cardSelect(locale),
+      select: cardSelect(locale, now),
     }),
     prisma.product.count({ where }),
   ])
@@ -180,7 +193,7 @@ export async function findPublicProductRows(filters: CatalogFilters, locale: Loc
 
 export type CatalogProductRow = Awaited<ReturnType<typeof findPublicProductRows>>["rows"][number]
 
-function detailSelect() {
+function detailSelect(now: Date) {
   return {
     id: true,
     code: true,
@@ -209,6 +222,7 @@ function detailSelect() {
     createdAt: true,
     updatedAt: true,
     translations: {
+      where: publishedTranslationWhere(undefined, now),
       orderBy: { locale: "asc" as const },
       select: {
         locale: true,
@@ -274,7 +288,7 @@ export async function findPublicProductByCodeRow(code: string, locale: Locale, n
       code,
       ...publicVisibilityWhere(locale, now),
     },
-    select: detailSelect(),
+    select: detailSelect(now),
   })
 }
 
@@ -293,6 +307,6 @@ export async function findRelatedPublicProductRows(
     },
     orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }, { code: "asc" }],
     take: Math.max(0, Math.min(limit, 3)),
-    select: cardSelect(locale),
+    select: cardSelect(locale, now),
   })
 }

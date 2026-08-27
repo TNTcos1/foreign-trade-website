@@ -76,6 +76,7 @@ describe("object storage configuration", () => {
     STORAGE_BUCKET: "private-media",
     STORAGE_ACCESS_KEY_ID: "test-access-key",
     STORAGE_SECRET_ACCESS_KEY: "test-secret-key",
+    STORAGE_PUBLIC_URL: "https://media.example.test/assets/",
   }
 
   it("accepts a complete S3-compatible configuration", () => {
@@ -85,6 +86,7 @@ describe("object storage configuration", () => {
       bucket: "private-media",
       accessKeyId: "test-access-key",
       secretAccessKey: "test-secret-key",
+      publicUrl: "https://media.example.test/assets/",
     })
   })
 

@@ -1,4 +1,4 @@
-import { PrismaClient, type Locale, type ProductStatus, type ProductType, type UserRole } from "@prisma/client"
+import { Prisma, PrismaClient, type Locale, type ProductStatus, type ProductType, type UserRole } from "@prisma/client"
 import { hash } from "bcryptjs"
 import { getDevelopmentSeedPassword } from "./development-seed-policy"
 
@@ -224,6 +224,7 @@ async function seed() {
       update: {
         ...productData,
         publishedAt: PUBLISHED_AT,
+        draftData: Prisma.DbNull,
         lastVerifiedAt: LAST_VERIFIED_AT,
         createdById: adminId,
         updatedById: editorId,
@@ -231,6 +232,7 @@ async function seed() {
       create: {
         ...productData,
         publishedAt: PUBLISHED_AT,
+        draftData: Prisma.DbNull,
         lastVerifiedAt: LAST_VERIFIED_AT,
         createdById: adminId,
         updatedById: editorId,
@@ -241,8 +243,8 @@ async function seed() {
     for (const locale of ["en", "ar"] satisfies Locale[]) {
       await prisma.productTranslation.upsert({
         where: { productId_locale: { productId: product.id, locale } },
-        update: translations[locale],
-        create: { productId: product.id, locale, ...translations[locale] },
+        update: { ...translations[locale], publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
+        create: { productId: product.id, locale, ...translations[locale], publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
       })
     }
 
@@ -370,8 +372,8 @@ async function seed() {
   for (const locale of ["en", "ar"] satisfies Locale[]) {
     await prisma.contentTranslation.upsert({
       where: { contentPageId_locale: { contentPageId: companyPage.id, locale } },
-      update: companyTranslations[locale],
-      create: { contentPageId: companyPage.id, locale, ...companyTranslations[locale] },
+      update: { ...companyTranslations[locale], publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
+      create: { contentPageId: companyPage.id, locale, ...companyTranslations[locale], publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
     })
   }
 
@@ -458,8 +460,8 @@ async function seed() {
       const translation = contentSeed.translations[locale]
       await prisma.contentTranslation.upsert({
         where: { contentPageId_locale: { contentPageId: contentPage.id, locale } },
-        update: translation,
-        create: { contentPageId: contentPage.id, locale, ...translation },
+        update: { ...translation, publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
+        create: { contentPageId: contentPage.id, locale, ...translation, publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
       })
     }
   }
@@ -496,8 +498,8 @@ async function seed() {
   for (const locale of ["en", "ar"] satisfies Locale[]) {
     await prisma.contentTranslation.upsert({
       where: { contentPageId_locale: { contentPageId: marketContentPage.id, locale } },
-      update: marketTranslations[locale],
-      create: { contentPageId: marketContentPage.id, locale, ...marketTranslations[locale] },
+      update: { ...marketTranslations[locale], publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
+      create: { contentPageId: marketContentPage.id, locale, ...marketTranslations[locale], publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
     })
   }
 
@@ -618,8 +620,8 @@ async function seed() {
       const translation = marketSeed.translations[locale]
       await prisma.contentTranslation.upsert({
         where: { contentPageId_locale: { contentPageId: contentPage.id, locale } },
-        update: translation,
-        create: { contentPageId: contentPage.id, locale, ...translation },
+        update: { ...translation, publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
+        create: { contentPageId: contentPage.id, locale, ...translation, publishedAt: PUBLISHED_AT, draftData: Prisma.DbNull },
       })
     }
     const additionalMarket = await prisma.marketPage.upsert({
